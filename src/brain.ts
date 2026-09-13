@@ -208,7 +208,7 @@ const VERDICTS: Record<Corner, { title: string; lines: Pools }> = {
         "No. Close the tab. Go check if anyone's crying.",
         "No. This is the kind of purchase that gets its own chapter in the divorce.",
         "Absolutely not. Buy a nice bottle of wine and look at pictures of it. That you can afford.",
-        "No. Not a 'not now'. A 'not while anyone in this house is under 18'.",
+        "No. Not 'not now'. 'Not until the youngest moves out.'",
       ],
       solo: [
         "No. Close the tab. Drink some water.",
@@ -727,7 +727,18 @@ export function decide(a: Answers, avoid?: string, item?: string): Verdict {
       : `${ratio > NEVER_THRESHOLD ? `That's ${ratio.toFixed(1)} months of income` : `That's ${pct}% of a month's income`} right now. Sliding scales, public options, and cheaper slots exist — the want is right, the price is negotiable.`
     : `${moneyLine} ${useLines.slice(0, 2).join(" ")}`;
 
-  return { key, title, punch, fact, pct, can, should: sincere || life ? true : should, need };
+  // pills must agree with the verdict on screen, so they derive from the final corner,
+  // not the raw axes (tiers like tiny/sincere/life override the corner after the axes are set)
+  return {
+    key,
+    title,
+    punch,
+    fact,
+    pct,
+    can: key === "buy" || key === "why" || key === "tiny",
+    should: key === "buy" || key === "save" || key === "tiny",
+    need,
+  };
 }
 
 export interface PlanStep { label: string; months: number; note: string; real?: boolean }
