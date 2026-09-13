@@ -542,6 +542,43 @@ const INTERCEPTS: { kind: string; re: RegExp; title: string; lines: string[] }[]
     ],
   },
   {
+    // "buying" a politician = bribery. The site never plays along, same posture as illegal.
+    kind: "bribery",
+    re: /^((a|an|the) )?(politician|senator|judge|cop|police officer|mayor|minister|president|prime minister|election|vote|votes)$|\b(trump|biden|obama|putin|netanyahu)\b/,
+    title: "Nope.",
+    lines: [
+      "This site does financial judgment, not campaign finance.",
+      "That's not shopping, that's a felony with paperwork. No verdict.",
+      "No math on this one. Democracy is having a hard enough week.",
+      "Not for sale here. Anywhere else it's a scandal, and you'd be the footnote.",
+    ],
+  },
+  {
+    // whole-item match on purpose: "taylor swift tickets" is a real purchase, "taylor swift" is not
+    kind: "celebrity",
+    re: /^(the rock|taylor swift|beyonce|beyoncé|rihanna|drake|kanye( west)?|kim kardashian|elon musk|jeff bezos|mark zuckerberg|bill gates|(lionel )?messi|(cristiano )?ronaldo|mbapp[eé]|lebron( james)?|michael jordan|brad pitt|angelina jolie|leonardo dicaprio|scarlett johansson|timoth[eé]e chalamet|zendaya|tom cruise|dua lipa|ariana grande|billie eilish|bad bunny|harry styles|keanu reeves|ryan gosling|margot robbie|pedro pascal|sydney sweeney|dwayne johnson|mrbeast|madonna|adele|shakira)$/,
+    title: "Not for sale. Especially to you.",
+    lines: [
+      "That one comes with lawyers. Plural. Yours would be a public defender.",
+      "You can't afford their hourly rate, and they bill for being perceived.",
+      "They employ people whose entire job is preventing this exact purchase.",
+      "Fame math: their security budget out-earns your whole year. The site checked.",
+      "No. But the restraining order is free, and you're making excellent progress toward one.",
+    ],
+  },
+  {
+    kind: "relational",
+    re: /^my (wife|husband|partner|girlfriend|boyfriend|crush|boss|neighbou?r|co-?worker|colleague|teacher|professor|landlord|mother[- ]in[- ]law|father[- ]in[- ]law|best friend|friend)$/,
+    title: "Not for sale.",
+    lines: [
+      "You can't buy people you know. It ruins the group chat.",
+      "Not for sale. Whatever they did, the answer is a conversation, not an acquisition.",
+      "The closest legal option is baked goods. Works more often than you'd think.",
+      "No. And pricing a human you see every week is a cry for help with excellent timing.",
+      "People can't be bought. Influenced by snacks, yes. Bought, no.",
+    ],
+  },
+  {
     kind: "person",
     re: /^(a |another |new |a new )?(girlfriend|boyfriend|wife|husband|partner|best friend|friends?( with benefits)?|soulmate|date|person|human|man|woman|guy|girl|boy)$/,
     title: "Not for sale.",
@@ -555,7 +592,7 @@ const INTERCEPTS: { kind: string; re: RegExp; title: string; lines: string[] }[]
   },
   {
     kind: "family-member",
-    re: /^(a |another |new |a new )?(mom|mum|dad|mother|father|brother|sister|grandma|grandpa|grandmother|grandfather|uncle|aunt)$/,
+    re: /^(a |another |new |a new |my )?(mom|mum|dad|mother|father|brother|sister|grandma|grandpa|grandmother|grandfather|uncle|aunt)$/,
     title: "Not for sale.",
     lines: [
       "Not for sale. You get the ones you get. That's the whole deal, and therapy is cheaper anyway.",
