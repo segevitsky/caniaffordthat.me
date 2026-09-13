@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { Answers, decide, money, plan } from "./brain";
+import { Answers, decide, interceptFor, money, pickLine, plan } from "./brain";
 import { Aside, Btn, Q } from "./ui";
 
 const PLACEHOLDERS = [
@@ -98,15 +98,15 @@ export function ChoiceQ<T extends string>({ q, aside, options, onNext }: {
 const REROLL = ["Say it differently", "Try again, I didn't like that", "One more", "Last one, I promise", "Okay you're just stalling now"];
 
 export function Verdict({ item, a, onPlan, onReset }: { item: string; a: Answers; onPlan: () => void; onReset: () => void }) {
-  const [r, setR] = useState(() => decide(a));
+  const [r, setR] = useState(() => decide(a, undefined, item));
   const [rolls, setRolls] = useState(0);
-  const reroll = () => { setR(decide(a, r.punch)); setRolls((n) => n + 1); };
+  const reroll = () => { setR(decide(a, r.punch, item)); setRolls((n) => n + 1); };
   const Pill = ({ ok, label }: { ok: boolean; label: string }) => (
     <span className={`font-body text-sm font-semibold px-3 py-1 rounded-full ${ok ? "bg-blue text-paper" : "bg-ink text-yellow"}`}>
       {label}: {ok ? "yes" : "no"}
     </span>
   );
-  const clean = r.can && r.should;
+  const clean = r.key === "buy" || r.key === "tiny";
   return (
     <div className="fadein">
       <p className="font-body text-lg mb-4 text-ink/55">{item}, {money(a.price)}</p>
@@ -126,8 +126,28 @@ export function Verdict({ item, a, onPlan, onReset }: { item: string; a: Answers
       </div>
 
       <div className="flex flex-col sm:flex-row sm:flex-wrap gap-3 sm:items-center">
-        {(r.key === "save" || r.key === "no") && <Btn onClick={onPlan}>Show me how to afford it anyway</Btn>}
+        {(r.key === "save" || r.key === "no" || r.key === "dream") && <Btn onClick={onPlan}>Show me how to afford it anyway</Btn>}
         <button onClick={onReset} className="font-body text-lg underline text-ink/55 py-3 text-left">Ask about something else</button>
+      </div>
+    </div>
+  );
+}
+
+export function Intercept({ item, onReset }: { item: string; onReset: () => void }) {
+  const info = interceptFor(item)!;
+  const [punch, setPunch] = useState(() => pickLine(info.lines));
+  const [rolls, setRolls] = useState(0);
+  const reroll = () => { setPunch(pickLine(info.lines, punch)); setRolls((n) => n + 1); };
+  return (
+    <div className="fadein">
+      <p className="font-body text-lg mb-4 text-ink/55">{item}</p>
+      <div className="font-display text-2xl mb-4 inline-block px-3 py-1 text-ink bg-yellow">{info.title}</div>
+      <h2 key={punch} className="font-display fadein text-3xl sm:text-4xl md:text-6xl leading-[1.02] mb-6 text-ink max-w-[16ch] tracking-tight">{punch}</h2>
+      <button onClick={reroll} className="font-body text-base mb-8 px-4 py-3 min-h-[44px] rounded-full border-2 border-ink text-ink focus:outline-none focus-visible:ring-4">
+        {REROLL[Math.min(rolls, REROLL.length - 1)]}
+      </button>
+      <div className="flex flex-col sm:flex-row sm:flex-wrap gap-3 sm:items-center">
+        <Btn onClick={onReset}>Ask about something you can actually buy</Btn>
       </div>
     </div>
   );

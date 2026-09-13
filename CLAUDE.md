@@ -17,6 +17,26 @@ Two axes, four corners:
 - CAN = price / monthly income <= 0.35. Over 1.5 is an automatic "no".
 - SHOULD = need score 0-12 from the four usage questions, threshold 6.
 - buy (can+should), why (can, shouldn't) <- signature corner, save (can't, should), no (neither).
+- Two override tiers for people testing the site: `tiny` (price <= $20 or <= 0.5% of income —
+  the joke is that you asked a website about pocket change) and `dream` (over 24 months of
+  income — the joke is that you typed a fantasy into a comedy quiz). Per-use math is skipped
+  (tiny) or reworded (dream) so the honest line stays true at the extremes.
+
+- Life events ("a dog", "a second kid", "a wedding", "a divorce" — whole-item match, so "a dog
+  bed" stays a normal purchase): dedicated yes/no punch pools, and the honest line swaps to
+  recurring-cost truth (a dog is ~$150/mo for 12 years; a kid is ~$300k to 18; a divorce is a
+  percentage, not a price). These close the loop on the site's own intro placeholders.
+- Sincere tier (therapy, dentist, meds, surgery...): the cynical voice must NOT fire. Need is
+  real by definition, so SHOULD is forced true and the verdict is only buy ("Yes. Go.") or
+  save ("Find a way."), warm both ways. Honest line drops the jokes.
+- Intercepts (checked at the intro, never reach the questions): un-buyables (love, a
+  girlfriend, sleep, happiness, my ex) get "Not for sale." with a re-rollable punch; illegal
+  items get "Nope." and a deflection — never run affordability math on a felony.
+- Spicy overlay: adult items (vibrator etc., regex on the typed item) swap in dedicated pools
+  for every corner — the regular pools produce accidental horror next to a sex toy ("the kids
+  will end up with it", "rent it, borrow it"). Rules for spicy lines: sex-positive, never shame
+  the want, jokes are about privacy and household logistics; in "no", the price is the villain,
+  never the desire.
 
 Voice is chosen by household: solo / partner / family / parents.
 `family` (couple with kids, 30-42) is the fully written persona and the first target audience.

@@ -1,12 +1,14 @@
 import { useState } from "react";
 import type { Answers, Household, IfNot, Replaces, Use, Wanted } from "./brain";
 import { money } from "./brain";
-import { ChoiceQ, Intro, Plan, PriceQ, SliderQ, Verdict } from "./screens";
+import { interceptFor } from "./brain";
+import { ChoiceQ, Intercept, Intro, Plan, PriceQ, SliderQ, Verdict } from "./screens";
 
 const DEFAULTS: Answers = { price: 0, income: 4000, household: "family", use: "weekly", replaces: "new", wanted: "weeks", ifnot: "sad" };
 const Q_COUNT = 7;
 const VERDICT = 8;
 const PLAN = 9;
+const INTERCEPT = 10;
 
 export default function App() {
   const [step, setStep] = useState(0);
@@ -18,10 +20,10 @@ export default function App() {
     setStep((s) => s + 1);
   };
   const reset = () => { setStep(0); setItem(""); };
-  const back = () => setStep((s) => (s === PLAN ? VERDICT : s - 1));
+  const back = () => setStep((s) => (s === PLAN ? VERDICT : s === INTERCEPT ? 0 : s - 1));
 
   const screens = [
-    <Intro onNext={(v) => { setItem(v); setStep(1); }} />,
+    <Intro onNext={(v) => { setItem(v); setStep(interceptFor(v) ? INTERCEPT : 1); }} />,
     <PriceQ item={item} onNext={set("price")} />,
     <SliderQ q="What do you make a month?" aside="After tax. Before regret." min={500} max={30000} step={100} initial={a.income} format={money} onNext={set("income")} />,
     <ChoiceQ<Household> q="Who lives with you?" aside="This decides who you'll have to explain it to."
@@ -41,6 +43,7 @@ export default function App() {
       onNext={set("ifnot")} />,
     <Verdict item={item} a={a} onPlan={() => setStep(PLAN)} onReset={reset} />,
     <Plan item={item} a={a} onReset={reset} />,
+    <Intercept item={item} onReset={reset} />,
   ];
 
   const progress = step >= 1 && step <= Q_COUNT ? step / Q_COUNT : 0;
