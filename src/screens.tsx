@@ -1,0 +1,157 @@
+import { useEffect, useMemo, useState } from "react";
+import { Answers, decide, money, plan } from "./brain";
+import { Aside, Btn, Q } from "./ui";
+
+const PLACEHOLDERS = [
+  "a PS5", "a house", "a third coffee machine", "a divorce", "a MacBook Pro I don't need",
+  "a dog", "an electric bike", "a second kid", "the good olive oil", "a standing desk",
+];
+
+export function Intro({ onNext }: { onNext: (item: string) => void }) {
+  const [item, setItem] = useState("");
+  const [i, setI] = useState(0);
+  useEffect(() => {
+    const t = setInterval(() => setI((x) => (x + 1) % PLACEHOLDERS.length), 1800);
+    return () => clearInterval(t);
+  }, []);
+  const go = () => item.trim() && onNext(item.trim());
+  return (
+    <div className="fadein">
+      <p className="font-body text-lg mb-10 text-ink/55">caniaffordthat.me</p>
+      <h1 className="font-display text-4xl sm:text-5xl md:text-7xl leading-[1.02] mb-8 md:mb-10 text-ink max-w-[12ch] tracking-tight">What do you want to buy?</h1>
+      <input
+        autoFocus
+        value={item}
+        onChange={(e) => setItem(e.target.value)}
+        onKeyDown={(e) => e.key === "Enter" && go()}
+        placeholder={PLACEHOLDERS[i]}
+        className="font-body w-full bg-transparent text-2xl sm:text-3xl md:text-5xl py-3 md:py-4 mb-8 focus:outline-none border-b-4 border-ink text-ink"
+      />
+      <Btn onClick={go} disabled={!item.trim()}>Let's find out</Btn>
+    </div>
+  );
+}
+
+export function PriceQ({ item, onNext }: { item: string; onNext: (n: number) => void }) {
+  const [v, setV] = useState("");
+  const n = Number(v);
+  const go = () => n > 0 && onNext(n);
+  return (
+    <div>
+      <Q>How much is {item}?</Q>
+      <Aside>Real price. Not the price you're going to tell people.</Aside>
+      <div className="flex items-end gap-2 mb-8">
+        <span className="font-display text-3xl sm:text-4xl md:text-6xl text-ink">$</span>
+        <input
+          autoFocus
+          type="number"
+          value={v}
+          onChange={(e) => setV(e.target.value)}
+          onKeyDown={(e) => e.key === "Enter" && go()}
+          placeholder="0"
+          inputMode="decimal" className="font-body bg-transparent text-3xl sm:text-4xl md:text-6xl w-full focus:outline-none border-b-4 border-ink text-ink"
+        />
+      </div>
+      <Btn onClick={go} disabled={!(n > 0)}>Next</Btn>
+    </div>
+  );
+}
+
+export function SliderQ({ q, aside, min, max, step, format, onNext, initial }: {
+  q: string; aside: string; min: number; max: number; step: number; initial: number;
+  format: (v: number) => string; onNext: (v: number) => void;
+}) {
+  const [v, setV] = useState(initial);
+  return (
+    <div>
+      <Q>{q}</Q>
+      <Aside>{aside}</Aside>
+      <div className="font-display text-4xl sm:text-5xl md:text-7xl mb-4 text-blue">{format(v)}</div>
+      <input type="range" min={min} max={max} step={step} value={v} onChange={(e) => setV(Number(e.target.value))} className="w-full h-10 mb-8 md:mb-10" aria-label={q} />
+      <Btn onClick={() => onNext(v)}>Next</Btn>
+    </div>
+  );
+}
+
+export function ChoiceQ<T extends string>({ q, aside, options, onNext }: {
+  q: string; aside?: string; options: { label: string; value: T }[]; onNext: (v: T) => void;
+}) {
+  return (
+    <div>
+      <Q>{q}</Q>
+      {aside && <Aside>{aside}</Aside>}
+      <div className="flex flex-col sm:flex-row sm:flex-wrap gap-3">
+        {options.map((o) => (
+          <button
+            key={o.label}
+            onClick={() => onNext(o.value)}
+            className="font-body w-full sm:w-auto px-5 py-4 sm:py-3 min-h-[52px] text-lg font-semibold rounded-full focus:outline-none focus-visible:ring-4 text-left border-[3px] border-ink text-ink bg-transparent hover:bg-ink/5"
+          >
+            {o.label}
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+const REROLL = ["Say it differently", "Try again, I didn't like that", "One more", "Last one, I promise", "Okay you're just stalling now"];
+
+export function Verdict({ item, a, onPlan, onReset }: { item: string; a: Answers; onPlan: () => void; onReset: () => void }) {
+  const [r, setR] = useState(() => decide(a));
+  const [rolls, setRolls] = useState(0);
+  const reroll = () => { setR(decide(a, r.punch)); setRolls((n) => n + 1); };
+  const Pill = ({ ok, label }: { ok: boolean; label: string }) => (
+    <span className={`font-body text-sm font-semibold px-3 py-1 rounded-full ${ok ? "bg-blue text-paper" : "bg-ink text-yellow"}`}>
+      {label}: {ok ? "yes" : "no"}
+    </span>
+  );
+  const clean = r.can && r.should;
+  return (
+    <div className="fadein">
+      <p className="font-body text-lg mb-4 text-ink/55">{item}, {money(a.price)}</p>
+      <div className="flex gap-2 mb-6"><Pill ok={r.can} label="Can afford" /><Pill ok={r.should} label="Should buy" /></div>
+      <div className={`font-display text-2xl mb-4 inline-block px-3 py-1 text-ink ${clean ? "" : "bg-yellow"}`}>{r.title}</div>
+      <h2 key={r.punch} className="font-display fadein text-3xl sm:text-4xl md:text-6xl leading-[1.02] mb-6 text-ink max-w-[16ch] tracking-tight">{r.punch}</h2>
+      <button onClick={reroll} className="font-body text-base mb-8 px-4 py-3 min-h-[44px] rounded-full border-2 border-ink text-ink focus:outline-none focus-visible:ring-4">
+        {REROLL[Math.min(rolls, REROLL.length - 1)]}
+      </button>
+      <p className="font-body text-lg md:text-xl mb-10 max-w-xl text-ink border-l-[6px] border-yellow pl-4">{r.fact}</p>
+
+      <div className="rounded-2xl p-6 mb-10 max-w-md bg-ink text-paper">
+        <p className="font-body text-sm mb-2 opacity-60">caniaffordthat.me</p>
+        <p className="font-body text-lg mb-1">{item}</p>
+        <p className="font-body text-sm mb-3 opacity-80">Can afford: {r.can ? "yes" : "no"}. Should buy: {r.should ? "yes" : "no"}.</p>
+        <p className="font-display text-3xl">{r.title}</p>
+      </div>
+
+      <div className="flex flex-col sm:flex-row sm:flex-wrap gap-3 sm:items-center">
+        {(r.key === "save" || r.key === "no") && <Btn onClick={onPlan}>Show me how to afford it anyway</Btn>}
+        <button onClick={onReset} className="font-body text-lg underline text-ink/55 py-3 text-left">Ask about something else</button>
+      </div>
+    </div>
+  );
+}
+
+export function Plan({ item, a, onReset }: { item: string; a: Answers; onReset: () => void }) {
+  const steps = useMemo(() => plan(a), [a]);
+  const fmtM = (m: number) => (m >= 24 ? `${(m / 12).toFixed(m % 12 === 0 ? 0 : 1)} yrs` : `${m} mo`);
+  return (
+    <div className="fadein">
+      <p className="font-body text-lg mb-6 text-ink/55">The optimistic plan for {item}</p>
+      <h2 className="font-display text-3xl sm:text-4xl md:text-6xl leading-[1.02] mb-3 text-ink max-w-[14ch] tracking-tight">Fine. Here's how.</h2>
+      <Aside>How long each strategy takes on its own. Pick one. Or don't.</Aside>
+      <ol className="max-w-2xl mb-12 border-l-[3px] border-ink ml-[10px]">
+        {steps.map((s, i) => (
+          <li key={i} className="relative pl-8 mb-8">
+            <span className={`absolute rounded-full w-[21px] h-[21px] -left-3 top-1.5 border-[3px] ${s.real ? "bg-blue border-blue" : "bg-paper border-ink"}`} />
+            <div className={`font-display text-lg mb-1 ${s.real ? "text-blue" : "text-ink"}`}>{fmtM(s.months)}</div>
+            <div className={`font-body text-lg md:text-xl text-ink ${s.real ? "font-semibold" : ""}`}>{s.label}</div>
+            <p className="font-body text-sm mt-1 text-ink/55">{s.note}</p>
+          </li>
+        ))}
+      </ol>
+      <Btn dark onClick={onReset}>Start over, wiser</Btn>
+    </div>
+  );
+}
