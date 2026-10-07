@@ -100,6 +100,24 @@ const REROLL = ["Say it differently", "Try again, I didn't like that", "One more
 export function Verdict({ item, a, onPlan, onReset }: { item: string; a: Answers; onPlan: () => void; onReset: () => void }) {
   const [r, setR] = useState(() => decide(a, undefined, item));
   const [rolls, setRolls] = useState(0);
+  useEffect(() => {
+    // learning loop (ROADMAP.md §1.1): fire-and-forget, once per verdict shown
+    fetch("/api/ask", {
+      method: "POST",
+      keepalive: true,
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({
+        item,
+        price: a.price,
+        answers: { income: a.income, household: a.household, use: a.use, replaces: a.replaces, wanted: a.wanted, ifnot: a.ifnot },
+        corner: r.key,
+        can: r.can,
+        should: r.should,
+        punch: r.punch,
+      }),
+    }).catch(() => {});
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   const reroll = () => { setR(decide(a, r.punch, item)); setRolls((n) => n + 1); };
   const Pill = ({ ok, label }: { ok: boolean; label: string }) => (
     <span className={`font-body text-sm font-semibold px-3 py-1 rounded-full ${ok ? "bg-blue text-paper" : "bg-ink text-yellow"}`}>
