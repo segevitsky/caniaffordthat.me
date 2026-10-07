@@ -138,15 +138,17 @@ const REROLL = ["Say it differently", "Try again, I didn't like that", "One more
 export function Verdict({ item, a, category, onPlan, onReset }: { item: string; a: Answers; category?: string | null; onPlan: () => void; onReset: () => void }) {
   const [r, setR] = useState(() => decide(a, undefined, item, category));
   const [rolls, setRolls] = useState(0);
-  // the writer (ROADMAP §1.4): pool punch shows instantly, the AI's replaces it when it lands
+  // the writer (ROADMAP §1.4): pool punch shows instantly on load, the AI's replaces it when
+  // it lands. On re-roll the current line HOLDS until the new one is ready — one change per
+  // click, never two (pool fallback only if the writer is slow or fails).
   const [ai, setAi] = useState<{ punch: string; personal: string | null } | null>(null);
+  const [rolling, setRolling] = useState(false);
   const aiSeq = useRef(0);
-  const askWriter = (avoid?: string) => {
-    const id = ++aiSeq.current;
+  const fetchWriter = (avoid?: string): Promise<{ punch: string | null; personal: string | null; fallback: boolean } | null> => {
     const tone = r.title === "Yes. Go." || r.title === "Find a way."
       ? "sincere"
       : isSpicy(item) || (category ? categoryKind(category) === "spicy" : false) ? "spicy" : "normal";
-    fetch("/api/verdict", {
+    return fetch("/api/verdict", {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: JSON.stringify({
@@ -155,10 +157,13 @@ export function Verdict({ item, a, category, onPlan, onReset }: { item: string; 
       }),
     })
       .then((res) => (res.ok ? res.json() : null))
-      .then((d) => { if (aiSeq.current === id && d && !d.fallback && d.punch) setAi({ punch: d.punch, personal: d.personal ?? null }); })
-      .catch(() => {});
+      .catch(() => null);
   };
-  useEffect(() => { askWriter(); /* eslint-disable-line react-hooks/exhaustive-deps */ }, []);
+  useEffect(() => {
+    const id = ++aiSeq.current;
+    fetchWriter().then((d) => { if (aiSeq.current === id && d && !d.fallback && d.punch) setAi({ punch: d.punch, personal: d.personal ?? null }); });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   useEffect(() => {
     // learning loop (ROADMAP.md §1.1): fire-and-forget, once per verdict shown
     fetch("/api/ask", {
@@ -180,11 +185,27 @@ export function Verdict({ item, a, category, onPlan, onReset }: { item: string; 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   const reroll = () => {
+    if (rolling) return;
     const shown = ai?.punch ?? r.punch;
-    setAi(null);
-    setR(decide(a, r.punch, item, category));
+    const next = decide(a, r.punch, item, category); // next pool roll, held back as the fallback
+    const id = ++aiSeq.current;
     setRolls((n) => n + 1);
-    askWriter(shown); // re-ask the writer; pool line covers the wait
+    setRolling(true);
+    const usePool = () => {
+      if (aiSeq.current !== id) return;
+      setAi(null);
+      setR(next);
+      setRolling(false);
+    };
+    const timer = setTimeout(usePool, 2500); // writer too slow -> pool line, one change either way
+    fetchWriter(shown).then((d) => {
+      if (aiSeq.current !== id) return;
+      clearTimeout(timer);
+      if (d && !d.fallback && d.punch && d.punch !== shown) {
+        setAi({ punch: d.punch, personal: d.personal ?? null });
+        setRolling(false);
+      } else usePool();
+    });
   };
   const Pill = ({ ok, label }: { ok: boolean; label: string }) => (
     <span className={`font-body text-sm font-semibold px-3 py-1 rounded-full ${ok ? "bg-blue text-paper" : "bg-ink text-yellow"}`}>
@@ -198,8 +219,8 @@ export function Verdict({ item, a, category, onPlan, onReset }: { item: string; 
       <div className="flex gap-2 mb-6"><Pill ok={r.can} label="Can afford" /><Pill ok={r.should} label="Should buy" /></div>
       <div className={`font-display text-2xl mb-4 inline-block px-3 py-1 text-ink ${clean ? "" : "bg-yellow"}`}>{r.title}</div>
       <h2 key={ai?.punch ?? r.punch} className="font-display fadein text-3xl sm:text-4xl md:text-6xl leading-[1.02] mb-6 text-ink max-w-[16ch] tracking-tight">{ai?.punch ?? r.punch}</h2>
-      <button onClick={reroll} className="font-body text-base mb-8 px-4 py-3 min-h-[44px] rounded-full border-2 border-ink text-ink focus:outline-none focus-visible:ring-4">
-        {REROLL[Math.min(rolls, REROLL.length - 1)]}
+      <button onClick={reroll} disabled={rolling} className={`font-body text-base mb-8 px-4 py-3 min-h-[44px] rounded-full border-2 border-ink text-ink focus:outline-none focus-visible:ring-4 ${rolling ? "opacity-50" : ""}`}>
+        {rolling ? "Thinking…" : REROLL[Math.min(rolls, REROLL.length - 1)]}
       </button>
       <p className="font-body text-lg md:text-xl mb-10 max-w-xl text-ink border-l-[6px] border-yellow pl-4">{r.fact}</p>
       {ai?.personal && <p key={ai.personal} className="font-body fadein text-lg md:text-xl -mt-6 mb-10 max-w-xl text-ink border-l-[6px] border-blue pl-4">{ai.personal}</p>}
