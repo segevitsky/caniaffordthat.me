@@ -7,14 +7,39 @@ const PLACEHOLDERS = [
   "a dog", "an electric bike", "a second kid", "the good olive oil", "a standing desk",
 ];
 
-export function Intro({ onNext }: { onNext: (item: string) => void }) {
+export interface ParsedLink { name: string | null; price: number | null }
+
+export function Intro({ onNext, onParsed }: { onNext: (item: string) => void; onParsed: (parsed: ParsedLink, url: string) => void }) {
   const [item, setItem] = useState("");
+  const [link, setLink] = useState("");
+  const [reading, setReading] = useState(false);
+  const [linkFail, setLinkFail] = useState(false);
   const [i, setI] = useState(0);
   useEffect(() => {
     const t = setInterval(() => setI((x) => (x + 1) % PLACEHOLDERS.length), 1800);
     return () => clearInterval(t);
   }, []);
   const go = () => item.trim() && onNext(item.trim());
+  const goLink = async () => {
+    const url = link.trim();
+    if (!url || reading) return;
+    setReading(true);
+    setLinkFail(false);
+    try {
+      const r = await fetch("/api/parse", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ url }),
+      });
+      const p = r.ok ? ((await r.json()) as ParsedLink) : null;
+      if (p?.name || p?.price) onParsed({ name: p.name, price: p.price }, url);
+      else setLinkFail(true);
+    } catch {
+      setLinkFail(true);
+    } finally {
+      setReading(false);
+    }
+  };
   return (
     <div className="fadein">
       <p className="font-body text-lg mb-10 text-ink/55">caniaffordthat.me</p>
@@ -28,18 +53,31 @@ export function Intro({ onNext }: { onNext: (item: string) => void }) {
         className="font-body w-full bg-transparent text-2xl sm:text-3xl md:text-5xl py-3 md:py-4 mb-8 focus:outline-none border-b-4 border-ink text-ink"
       />
       <Btn onClick={go} disabled={!item.trim()}>Let's find out</Btn>
+      <div className="mt-10">
+        <input
+          value={link}
+          onChange={(e) => setLink(e.target.value)}
+          onKeyDown={(e) => e.key === "Enter" && goLink()}
+          placeholder="or paste a link from any store"
+          inputMode="url"
+          disabled={reading}
+          className="font-body w-full bg-transparent text-lg md:text-xl py-3 min-h-[44px] focus:outline-none border-b-2 border-ink/30 focus:border-ink text-ink placeholder:text-ink/40 disabled:opacity-50"
+        />
+        {reading && <p className="font-body text-base mt-3 text-ink/55 fadein">Reading the page. Stores lie, give it a second.</p>}
+        {linkFail && <p className="font-body text-base mt-3 text-ink/55 fadein">That store won't talk to us. Type it yourself, it's faster than their website anyway.</p>}
+      </div>
     </div>
   );
 }
 
-export function PriceQ({ item, onNext }: { item: string; onNext: (n: number) => void }) {
-  const [v, setV] = useState("");
+export function PriceQ({ item, initial, onNext }: { item: string; initial?: number | null; onNext: (n: number) => void }) {
+  const [v, setV] = useState(initial && initial > 0 ? String(initial) : "");
   const n = Number(v);
   const go = () => n > 0 && onNext(n);
   return (
     <div>
       <Q>How much is {item}?</Q>
-      <Aside>Real price. Not the price you're going to tell people.</Aside>
+      <Aside>{initial ? "From the link. Correct it if the store was lying." : "Real price. Not the price you're going to tell people."}</Aside>
       <div className="flex items-end gap-2 mb-8">
         <span className="font-display text-3xl sm:text-4xl md:text-6xl text-ink">$</span>
         <input

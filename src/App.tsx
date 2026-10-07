@@ -13,18 +13,27 @@ const INTERCEPT = 10;
 export default function App() {
   const [step, setStep] = useState(0);
   const [item, setItem] = useState("");
+  const [linkPrice, setLinkPrice] = useState<number | null>(null);
   const [a, setA] = useState<Answers>(DEFAULTS);
 
   const set = <K extends keyof Answers>(k: K) => (v: Answers[K]) => {
     setA((x) => ({ ...x, [k]: v }));
     setStep((s) => s + 1);
   };
-  const reset = () => { setStep(0); setItem(""); };
+  const reset = () => { setStep(0); setItem(""); setLinkPrice(null); };
   const back = () => setStep((s) => (s === PLAN ? VERDICT : s === INTERCEPT ? 0 : s - 1));
 
   const screens = [
-    <Intro onNext={(v) => { setItem(v); setStep(interceptFor(v) ? INTERCEPT : 1); }} />,
-    <PriceQ item={item} onNext={set("price")} />,
+    <Intro
+      onNext={(v) => { setItem(v); setLinkPrice(null); setStep(interceptFor(v) ? INTERCEPT : 1); }}
+      onParsed={(p, url) => {
+        const name = p.name ?? `that thing from ${new URL(url).hostname.replace(/^www\./, "")}`;
+        setItem(name);
+        setLinkPrice(p.price);
+        setStep(interceptFor(name) ? INTERCEPT : 1);
+      }}
+    />,
+    <PriceQ item={item} initial={linkPrice} onNext={set("price")} />,
     <SliderQ q="What do you make a month?" aside="After tax. Before regret." min={500} max={30000} step={100} initial={a.income} format={money} onNext={set("income")} />,
     <ChoiceQ<Household> q="Who lives with you?" aside="This decides who you'll have to explain it to."
       options={[{ label: "Just me", value: "solo" }, { label: "A partner", value: "partner" }, { label: "A partner and kids", value: "family" }, { label: "My parents, unfortunately", value: "parents" }]}

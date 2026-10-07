@@ -11,7 +11,7 @@ export interface ParseResult {
   category: string | null;
   image: string | null;
   confidence: number; // 0..1 — under 0.5 means "show what we have and ask"
-  source: "jsonld" | "og" | "title" | "blocked" | "error" | "none";
+  source: "jsonld" | "og" | "title" | "ai" | "blocked" | "error" | "none";
   status?: number;
 }
 
