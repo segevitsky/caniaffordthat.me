@@ -1,5 +1,5 @@
-import { useEffect, useMemo, useState } from "react";
-import { Answers, decide, interceptFor, money, pickLine, plan } from "./brain";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { Answers, categoryKind, decide, interceptFor, isSpicy, money, pickLine, plan } from "./brain";
 import { Aside, Btn, Q } from "./ui";
 
 const PLACEHOLDERS = [
@@ -138,6 +138,27 @@ const REROLL = ["Say it differently", "Try again, I didn't like that", "One more
 export function Verdict({ item, a, category, onPlan, onReset }: { item: string; a: Answers; category?: string | null; onPlan: () => void; onReset: () => void }) {
   const [r, setR] = useState(() => decide(a, undefined, item, category));
   const [rolls, setRolls] = useState(0);
+  // the writer (ROADMAP §1.4): pool punch shows instantly, the AI's replaces it when it lands
+  const [ai, setAi] = useState<{ punch: string; personal: string | null } | null>(null);
+  const aiSeq = useRef(0);
+  const askWriter = (avoid?: string) => {
+    const id = ++aiSeq.current;
+    const tone = r.title === "Yes. Go." || r.title === "Find a way."
+      ? "sincere"
+      : isSpicy(item) || (category ? categoryKind(category) === "spicy" : false) ? "spicy" : "normal";
+    fetch("/api/verdict", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({
+        item, category: category ?? null, corner: r.key, title: r.title, persona: a.household, tone,
+        price: a.price, income: a.income, pct: r.pct, month: a.month ?? null, reasons: r.reasons, avoid,
+      }),
+    })
+      .then((res) => (res.ok ? res.json() : null))
+      .then((d) => { if (aiSeq.current === id && d && !d.fallback && d.punch) setAi({ punch: d.punch, personal: d.personal ?? null }); })
+      .catch(() => {});
+  };
+  useEffect(() => { askWriter(); /* eslint-disable-line react-hooks/exhaustive-deps */ }, []);
   useEffect(() => {
     // learning loop (ROADMAP.md §1.1): fire-and-forget, once per verdict shown
     fetch("/api/ask", {
@@ -158,7 +179,13 @@ export function Verdict({ item, a, category, onPlan, onReset }: { item: string; 
     }).catch(() => {});
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  const reroll = () => { setR(decide(a, r.punch, item, category)); setRolls((n) => n + 1); };
+  const reroll = () => {
+    const shown = ai?.punch ?? r.punch;
+    setAi(null);
+    setR(decide(a, r.punch, item, category));
+    setRolls((n) => n + 1);
+    askWriter(shown); // re-ask the writer; pool line covers the wait
+  };
   const Pill = ({ ok, label }: { ok: boolean; label: string }) => (
     <span className={`font-body text-sm font-semibold px-3 py-1 rounded-full ${ok ? "bg-blue text-paper" : "bg-ink text-yellow"}`}>
       {label}: {ok ? "yes" : "no"}
@@ -170,11 +197,12 @@ export function Verdict({ item, a, category, onPlan, onReset }: { item: string; 
       <p className="font-body text-lg mb-4 text-ink/55">{item}, {money(a.price)}</p>
       <div className="flex gap-2 mb-6"><Pill ok={r.can} label="Can afford" /><Pill ok={r.should} label="Should buy" /></div>
       <div className={`font-display text-2xl mb-4 inline-block px-3 py-1 text-ink ${clean ? "" : "bg-yellow"}`}>{r.title}</div>
-      <h2 key={r.punch} className="font-display fadein text-3xl sm:text-4xl md:text-6xl leading-[1.02] mb-6 text-ink max-w-[16ch] tracking-tight">{r.punch}</h2>
+      <h2 key={ai?.punch ?? r.punch} className="font-display fadein text-3xl sm:text-4xl md:text-6xl leading-[1.02] mb-6 text-ink max-w-[16ch] tracking-tight">{ai?.punch ?? r.punch}</h2>
       <button onClick={reroll} className="font-body text-base mb-8 px-4 py-3 min-h-[44px] rounded-full border-2 border-ink text-ink focus:outline-none focus-visible:ring-4">
         {REROLL[Math.min(rolls, REROLL.length - 1)]}
       </button>
       <p className="font-body text-lg md:text-xl mb-10 max-w-xl text-ink border-l-[6px] border-yellow pl-4">{r.fact}</p>
+      {ai?.personal && <p key={ai.personal} className="font-body fadein text-lg md:text-xl -mt-6 mb-10 max-w-xl text-ink border-l-[6px] border-blue pl-4">{ai.personal}</p>}
 
       <div className="rounded-2xl p-6 mb-10 max-w-md bg-ink text-paper">
         <p className="font-body text-sm mb-2 opacity-60">caniaffordthat.me</p>

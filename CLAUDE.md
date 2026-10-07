@@ -53,6 +53,14 @@ Voice is chosen by household: solo / partner / family / parents.
 `family` (couple with kids, 30-42) is the fully written persona and the first target audience.
 Others are placeholder pools for now.
 
+## The writer (api/verdict.ts + api/_lib/voice.ts)
+AI-written punch + personal line (claude-haiku via the api/_lib/ai.ts wrapper — the only file
+that knows a provider exists). The brain decides; the writer only delivers. Verdict screen
+shows the pool punch instantly and fades in the AI's when it lands; re-roll re-asks the writer.
+Guard rails in code: corner-agreement check, no digits not present in the inputs, pool fallback
+on any failure. Tone switches (sincere drops all jokes, spicy follows the spicy rules) ride on
+the request. The voice doc's examples ARE pool lines — one voice, two sources.
+
 ## Content rules (non-negotiable)
 - A line that references a specific answer (daily use, "since you saw someone else", broken, etc.)
   MUST carry a `when` condition. A joke that's wrong about the user is a form letter, not a joke.
