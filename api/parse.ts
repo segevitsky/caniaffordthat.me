@@ -2,8 +2,10 @@
 // Tier 1: OG + JSON-LD from the page itself. Tier 2: when tier 1 can't produce name+price and an
 // ANTHROPIC_API_KEY is configured, a fast/cheap model with web search fills the gaps.
 // Still no cache (ROADMAP wants 24h by URL) — add once there's traffic worth caching.
-import { parseProductPage } from "./_lib/parse";
-import { aiParseProduct } from "./_lib/ai";
+// .js extensions are required: with "type": "module" Vercel runs these as ES modules,
+// and Node ESM resolution needs explicit extensions on relative imports (TS maps .js -> .ts).
+import { parseProductPage } from "./_lib/parse.js";
+import { aiParseProduct } from "./_lib/ai.js";
 
 export const config = { maxDuration: 30 }; // tier 1 (10s) + tier 2 (20s) can exceed the 10s default
 

@@ -1,7 +1,7 @@
 // Hit-rate harness for the tier-1 link parser. Run: npx tsx scripts/parse-harness.ts [urls-file]
 // Prints one line per URL (name/price/source/confidence) and a hit-rate summary.
 // The URL list is the test fixture: real product pages across the stores we care about.
-import { parseProductPage } from "../api/_lib/parse";
+import { parseProductPage } from "../api/_lib/parse.js";
 import { readFileSync } from "node:fs";
 
 const DEFAULT_URLS = [
