@@ -1,0 +1,34 @@
+# Tier-1 parser fixture: real product pages across target stores (gathered 2026-10-07).
+# Lines starting with # are skipped. URLs marked (guess) use known-stable slugs but weren't verified live.
+
+# Amazon
+https://www.amazon.com/PlayStation%C2%AE5-console-slim-PlayStation-5/dp/B0CL61F39H
+https://www.amazon.com/Playstation-Console-Controllers-DualSense-Charging-5/dp/B0F7M59PQ5
+
+# Apple
+https://www.apple.com/shop/buy-airpods/airpods-pro-3
+https://www.apple.com/shop/buy-mac/macbook-air
+
+# IKEA
+https://www.ikea.com/us/en/p/billy-bookcase-white-20522046/
+
+# KSP (IL)
+https://ksp.co.il/mob/item/332575
+https://ksp.co.il/mob/item/333446
+
+# Walmart
+https://www.walmart.com/ip/Ninja-Air-Fryer-Pro-4-in-1-5-QT-Capacity-Fry-Roast-Reheat-Dehydrate-Crisp-Technology-400F-hot-crispy-results-just-minutes-Nonstick-Basket-Crisper-Pla/11526364074
+https://www.walmart.com/ip/Ninja-Foodi-6-in-1-10-qt-XL-2-Basket-Air-Fryer-DZ401/574134807
+
+# Etsy
+https://www.etsy.com/listing/4491646634/handmade-ceramic-16-oz-coffee-mug
+https://www.etsy.com/listing/547494925/large-handmade-pottery-mug-slate-glaze
+
+# LEGO (guess, stable slug)
+https://www.lego.com/en-us/product/millennium-falcon-75192
+
+# Nike (guess, stable style code)
+https://www.nike.com/t/air-force-1-07-mens-shoes-jBrhbr/CW2288-111
+
+# AliExpress (guess, unverified item id — search engines only expose category pages)
+https://www.aliexpress.com/item/1005005504025352.html
