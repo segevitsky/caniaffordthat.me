@@ -7,7 +7,7 @@ const PLACEHOLDERS = [
   "a dog", "an electric bike", "a second kid", "the good olive oil", "a standing desk",
 ];
 
-export interface ParsedLink { name: string | null; price: number | null }
+export interface ParsedLink { name: string | null; price: number | null; category: string | null }
 
 export function Intro({ onNext, onParsed }: { onNext: (item: string) => void; onParsed: (parsed: ParsedLink, url: string) => void }) {
   const [item, setItem] = useState("");
@@ -32,7 +32,7 @@ export function Intro({ onNext, onParsed }: { onNext: (item: string) => void; on
         body: JSON.stringify({ url }),
       });
       const p = r.ok ? ((await r.json()) as ParsedLink) : null;
-      if (p?.name || p?.price) onParsed({ name: p.name, price: p.price }, url);
+      if (p?.name || p?.price) onParsed({ name: p.name, price: p.price, category: p.category ?? null }, url);
       else setLinkFail(true);
     } catch {
       setLinkFail(true);
@@ -135,8 +135,8 @@ export function ChoiceQ<T extends string>({ q, aside, options, onNext }: {
 
 const REROLL = ["Say it differently", "Try again, I didn't like that", "One more", "Last one, I promise", "Okay you're just stalling now"];
 
-export function Verdict({ item, a, onPlan, onReset }: { item: string; a: Answers; onPlan: () => void; onReset: () => void }) {
-  const [r, setR] = useState(() => decide(a, undefined, item));
+export function Verdict({ item, a, category, onPlan, onReset }: { item: string; a: Answers; category?: string | null; onPlan: () => void; onReset: () => void }) {
+  const [r, setR] = useState(() => decide(a, undefined, item, category));
   const [rolls, setRolls] = useState(0);
   useEffect(() => {
     // learning loop (ROADMAP.md §1.1): fire-and-forget, once per verdict shown
@@ -147,6 +147,7 @@ export function Verdict({ item, a, onPlan, onReset }: { item: string; a: Answers
       body: JSON.stringify({
         item,
         price: a.price,
+        category: category ?? null,
         answers: { income: a.income, household: a.household, use: a.use, replaces: a.replaces, wanted: a.wanted, ifnot: a.ifnot },
         corner: r.key,
         can: r.can,
@@ -156,7 +157,7 @@ export function Verdict({ item, a, onPlan, onReset }: { item: string; a: Answers
     }).catch(() => {});
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  const reroll = () => { setR(decide(a, r.punch, item)); setRolls((n) => n + 1); };
+  const reroll = () => { setR(decide(a, r.punch, item, category)); setRolls((n) => n + 1); };
   const Pill = ({ ok, label }: { ok: boolean; label: string }) => (
     <span className={`font-body text-sm font-semibold px-3 py-1 rounded-full ${ok ? "bg-blue text-paper" : "bg-ink text-yellow"}`}>
       {label}: {ok ? "yes" : "no"}

@@ -640,6 +640,19 @@ export function interceptFor(item: string): InterceptResult | null {
   return hit ? { kind: hit.kind, title: hit.title, lines: hit.lines } : null;
 }
 
+// Parsed store category (from a pasted link) as a routing hint — catches items the name
+// regexes can't ("a Satisfyer Pro 2" says nothing to the regex; the store's category says
+// everything). Deliberately conservative: only unambiguous categories route. "Pet Supplies"
+// does NOT trigger the pet life-event (a dog bed is a purchase, not a dog), and generic
+// "Health & Personal Care" (shampoo) does not trigger sincere — only clearly-medical does.
+export type CategoryKind = "spicy" | "sincere";
+export function categoryKind(category: string): CategoryKind | null {
+  const c = category.toLowerCase();
+  if (/\b(sex|adult|erotic|intimacy)\b/.test(c)) return "spicy";
+  if (/\b(medical|medicine|pharmacy|prescription|mobility|therapy|dental)\b/.test(c)) return "sincere";
+  return null;
+}
+
 const rand = <T,>(arr: T[]): T => arr[Math.floor(Math.random() * arr.length)];
 export function pickLine(lines: string[], avoid?: string): string {
   const pool = lines.filter((l) => l !== avoid);
@@ -647,15 +660,16 @@ export function pickLine(lines: string[], avoid?: string): string {
 }
 export const money = (n: number) => "$" + Math.round(n).toLocaleString();
 
-export function decide(a: Answers, avoid?: string, item?: string): Verdict {
+export function decide(a: Answers, avoid?: string, item?: string, category?: string | null): Verdict {
   const ratio = a.price / Math.max(a.income, 1);
   const can = ratio <= CAN_THRESHOLD;
   const need = NEED.use[a.use] + NEED.replaces[a.replaces] + NEED.wanted[a.wanted] + NEED.ifnot[a.ifnot];
   const should = need >= SHOULD_THRESHOLD;
 
-  const spicy = !!item && isSpicy(item);
+  const catKind = category ? categoryKind(category) : null;
+  const spicy = (!!item && isSpicy(item)) || catKind === "spicy";
   const life = item ? lifeKind(item) : null;
-  const sincere = !!item && isSincere(item);
+  const sincere = (!!item && isSincere(item)) || catKind === "sincere";
 
   let key: Corner = can ? (should ? "buy" : "why") : should ? "save" : "no";
   if (life) key = can ? "buy" : "save"; // the want is taken as real; money is the only axis left

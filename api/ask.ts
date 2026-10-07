@@ -62,10 +62,12 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
   if (!url || !key) return res.status(500).json({ error: "server not configured" });
 
+  const category = typeof body.category === "string" && body.category.length > 0 ? body.category.slice(0, 100) : null;
   const row = {
     item: item.trim(),
     price,
     currency: "USD",
+    category,
     income_bucket: incomeBucket(a.income),
     household: a.household,
     use: a.use,

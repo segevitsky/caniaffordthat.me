@@ -32,6 +32,11 @@ Two axes, four corners:
 - Intercepts (checked at the intro, never reach the questions): un-buyables (love, a
   girlfriend, sleep, happiness, my ex) get "Not for sale." with a re-rollable punch; illegal
   items get "Nope." and a deflection — never run affordability math on a felony.
+- Category hint: a pasted link's parsed store category routes tiers the item-name regex
+  can't catch ("a Satisfyer Pro 2" → category "Sex Toys" → spicy). Deliberately conservative:
+  only unambiguous categories route (sex/adult → spicy, strictly-medical → sincere). "Pet
+  Supplies" never triggers the pet life-event (a dog bed is a purchase, not a dog) and generic
+  "Health & Personal Care" never triggers sincere. Category is also logged to asks.
 - Spicy overlay: adult items (vibrator etc., regex on the typed item) swap in dedicated pools
   for every corner — the regular pools produce accidental horror next to a sex toy ("the kids
   will end up with it", "rent it, borrow it"). Rules for spicy lines: sex-positive, never shame

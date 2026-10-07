@@ -14,22 +14,24 @@ export default function App() {
   const [step, setStep] = useState(0);
   const [item, setItem] = useState("");
   const [linkPrice, setLinkPrice] = useState<number | null>(null);
+  const [linkCategory, setLinkCategory] = useState<string | null>(null);
   const [a, setA] = useState<Answers>(DEFAULTS);
 
   const set = <K extends keyof Answers>(k: K) => (v: Answers[K]) => {
     setA((x) => ({ ...x, [k]: v }));
     setStep((s) => s + 1);
   };
-  const reset = () => { setStep(0); setItem(""); setLinkPrice(null); };
+  const reset = () => { setStep(0); setItem(""); setLinkPrice(null); setLinkCategory(null); };
   const back = () => setStep((s) => (s === PLAN ? VERDICT : s === INTERCEPT ? 0 : s - 1));
 
   const screens = [
     <Intro
-      onNext={(v) => { setItem(v); setLinkPrice(null); setStep(interceptFor(v) ? INTERCEPT : 1); }}
+      onNext={(v) => { setItem(v); setLinkPrice(null); setLinkCategory(null); setStep(interceptFor(v) ? INTERCEPT : 1); }}
       onParsed={(p, url) => {
         const name = p.name ?? `that thing from ${new URL(url).hostname.replace(/^www\./, "")}`;
         setItem(name);
         setLinkPrice(p.price);
+        setLinkCategory(p.category);
         setStep(interceptFor(name) ? INTERCEPT : 1);
       }}
     />,
@@ -50,7 +52,7 @@ export default function App() {
     <ChoiceQ<IfNot> q="What happens if you don't buy it?"
       options={[{ label: "Nothing", value: "nothing" }, { label: "Mild sadness", value: "sad" }, { label: "I'll keep asking this site", value: "asking" }, { label: "My life is measurably worse", value: "worse" }]}
       onNext={set("ifnot")} />,
-    <Verdict item={item} a={a} onPlan={() => setStep(PLAN)} onReset={reset} />,
+    <Verdict item={item} a={a} category={linkCategory} onPlan={() => setStep(PLAN)} onReset={reset} />,
     <Plan item={item} a={a} onReset={reset} />,
     <Intercept item={item} onReset={reset} />,
   ];
