@@ -188,8 +188,14 @@ export function Verdict({ item, a, category, onPlan, onReset }: { item: string; 
     if (rolling) return;
     const shown = ai?.punch ?? r.punch;
     const next = decide(a, r.punch, item, category); // next pool roll, held back as the fallback
-    const id = ++aiSeq.current;
     setRolls((n) => n + 1);
+    if (rolls >= 5) {
+      // past "Okay you're just stalling now": the site gives up on you — free pool lines only
+      setAi(null);
+      setR(next);
+      return;
+    }
+    const id = ++aiSeq.current;
     setRolling(true);
     const usePool = () => {
       if (aiSeq.current !== id) return;
