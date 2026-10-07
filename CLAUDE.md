@@ -13,6 +13,12 @@ If the answer is no, an "afford it anyway" plan mode shows absurd strategies nex
 real one.
 
 ## The brain (src/brain.ts)
+Brain v2: each axis is a sum of signals (small pure functions returning {name, axis, score,
+weight, reason}); weights live in src/weights.json (changing one is a data change). The top-3
+reasons by |score x weight| ride on every Verdict — they're the writer's input and get logged
+to asks. The contract is tests/calibration.json: `npm test` must pass before any push; if a
+behavior change is intended, regenerate via scripts/gen-fixture.ts and review the diff.
+
 Two axes, four corners:
 - CAN = price / monthly income <= 0.35. Over 1.5 is an automatic "no".
 - SHOULD = need score 0-12 from the four usage questions, threshold 6.

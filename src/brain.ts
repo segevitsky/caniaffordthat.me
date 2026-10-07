@@ -1,5 +1,9 @@
 // The brain. Two axes: CAN (money) and SHOULD (need). Four corners, four voices.
 // Content rule: a line that mentions a specific answer MUST carry a `when` condition.
+// v2: each axis is a sum of signals (score x weight, from weights.json); a corner wins when
+// its axis sum is >= 0. Calibrated to reproduce the old thresholds exactly — the contract
+// is tests/calibration.json, verified by `npm test`. Changing a weight is a data change.
+import WEIGHTS from "./weights.json";
 
 export type Household = "solo" | "partner" | "family" | "parents";
 export type Use = "daily" | "weekly" | "weekends" | "once";
@@ -30,6 +34,8 @@ export interface Verdict {
   can: boolean;
   should: boolean;
   need: number;
+  signals: Signal[];
+  reasons: string[]; // top signals' reason strings — the writer's raw material
 }
 
 export const CAN_THRESHOLD = 0.35; // share of monthly income
@@ -45,6 +51,49 @@ const NEED = {
   wanted: { years: 3, weeks: 2, morning: 0, someone: -1 },
   ifnot: { worse: 3, asking: 1, sad: 1, nothing: 0 },
 } as const;
+
+// ---- Signals ---------------------------------------------------------------
+// Each signal is a small pure function: positive score pushes its axis toward "yes".
+// SHOULD signals are centered on the per-question midpoint (1.5) so the axis sum equals
+// need - 6 — i.e. the old threshold, reproduced exactly. The `reason` strings are what
+// the writer will hand back to the user, so they must stay specific and true.
+
+export interface Signal {
+  name: string;
+  axis: "can" | "should";
+  score: number;
+  weight: number;
+  reason: string;
+  source: "user";
+}
+
+const REASONS = {
+  use: { daily: "you'd use it every day", weekly: "you'd use it weekly", weekends: "'weekends' means about 20 real uses a year", once: "you'd use it once" },
+  replaces: { habit: "it replaces a habit that already costs money", broken: "it replaces something broken", new: "it replaces nothing you own", fine: "it replaces something that works fine" },
+  wanted: { years: "you've wanted it for years", weeks: "you've wanted it a few weeks", morning: "you've wanted it since this morning", someone: "you want it because you saw someone else with it" },
+  ifnot: { worse: "your life is measurably worse without it", asking: "you'll keep asking about it", sad: "mild sadness at most if you skip it", nothing: "your own words: nothing happens if you don't buy it" },
+} as const;
+
+interface SignalCtx { a: Answers; ratio: number; pct: number }
+
+const SIGNAL_FNS: ((c: SignalCtx) => Signal | null)[] = [
+  ({ ratio, pct }) => ({ name: "share_of_income", axis: "can", score: CAN_THRESHOLD - ratio, weight: WEIGHTS.share_of_income, reason: `it costs ${pct}% of a month's income`, source: "user" }),
+  ({ a }) => ({ name: "use_frequency", axis: "should", score: NEED.use[a.use] - 1.5, weight: WEIGHTS.use_frequency, reason: REASONS.use[a.use], source: "user" }),
+  ({ a }) => ({ name: "replaces", axis: "should", score: NEED.replaces[a.replaces] - 1.5, weight: WEIGHTS.replaces, reason: REASONS.replaces[a.replaces], source: "user" }),
+  ({ a }) => ({ name: "wanted_since", axis: "should", score: NEED.wanted[a.wanted] - 1.5, weight: WEIGHTS.wanted_since, reason: REASONS.wanted[a.wanted], source: "user" }),
+  ({ a }) => ({ name: "if_not", axis: "should", score: NEED.ifnot[a.ifnot] - 1.5, weight: WEIGHTS.if_not, reason: REASONS.ifnot[a.ifnot], source: "user" }),
+];
+
+function buildSignals(c: SignalCtx): Signal[] {
+  return SIGNAL_FNS.map((fn) => fn(c)).filter((s): s is Signal => s !== null);
+}
+
+const axisSum = (signals: Signal[], axis: "can" | "should") =>
+  signals.filter((s) => s.axis === axis).reduce((t, s) => t + s.score * s.weight, 0);
+
+// Top signals by |score x weight| — the "becauses" handed to the writer.
+export const topReasons = (signals: Signal[], n = 3): string[] =>
+  [...signals].sort((x, y) => Math.abs(y.score * y.weight) - Math.abs(x.score * x.weight)).slice(0, n).map((s) => s.reason);
 
 type Pools = Partial<Record<Household, Line[]>> & { family: Line[] };
 
@@ -662,9 +711,11 @@ export const money = (n: number) => "$" + Math.round(n).toLocaleString();
 
 export function decide(a: Answers, avoid?: string, item?: string, category?: string | null): Verdict {
   const ratio = a.price / Math.max(a.income, 1);
-  const can = ratio <= CAN_THRESHOLD;
+  const pct = Math.round(ratio * 100);
+  const signals = buildSignals({ a, ratio, pct });
+  const can = axisSum(signals, "can") >= 0;
+  const should = axisSum(signals, "should") >= 0;
   const need = NEED.use[a.use] + NEED.replaces[a.replaces] + NEED.wanted[a.wanted] + NEED.ifnot[a.ifnot];
-  const should = need >= SHOULD_THRESHOLD;
 
   const catKind = category ? categoryKind(category) : null;
   const spicy = (!!item && isSpicy(item)) || catKind === "spicy";
@@ -690,7 +741,6 @@ export function decide(a: Answers, avoid?: string, item?: string, category?: str
   const punch = rand(pool.length ? pool : base.length ? base : lines.family.filter(fits).map(unwrap));
 
   // the honest line: one money truth + up to two usage truths, all specific
-  const pct = Math.round(ratio * 100);
   const usesPerYear = { daily: 365, weekly: 52, weekends: 20, once: 1 }[a.use];
   const perUse = a.price / usesPerYear;
   const perUseStr = perUse < 1 ? "pennies" : money(perUse);
@@ -752,6 +802,8 @@ export function decide(a: Answers, avoid?: string, item?: string, category?: str
     can: key === "buy" || key === "why" || key === "tiny",
     should: key === "buy" || key === "save" || key === "tiny",
     need,
+    signals,
+    reasons: topReasons(signals),
   };
 }
 

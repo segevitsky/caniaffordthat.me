@@ -153,6 +153,7 @@ export function Verdict({ item, a, category, onPlan, onReset }: { item: string; 
         can: r.can,
         should: r.should,
         punch: r.punch,
+        signals: r.signals.map(({ name, axis, score, weight }) => ({ name, axis, score, weight })),
       }),
     }).catch(() => {});
     // eslint-disable-next-line react-hooks/exhaustive-deps

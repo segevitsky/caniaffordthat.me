@@ -63,6 +63,18 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (!url || !key) return res.status(500).json({ error: "server not configured" });
 
   const category = typeof body.category === "string" && body.category.length > 0 ? body.category.slice(0, 100) : null;
+
+  // signals as computed by the brain: [{name, axis, score, weight}] — sanitized, never rejected
+  const rawSignals = Array.isArray(body.signals) ? body.signals.slice(0, 10) : [];
+  const signals = rawSignals.flatMap((s) => {
+    const o = (s ?? {}) as Record<string, unknown>;
+    return typeof o.name === "string" && o.name.length <= 40 &&
+      (o.axis === "can" || o.axis === "should") &&
+      typeof o.score === "number" && Number.isFinite(o.score) &&
+      typeof o.weight === "number" && Number.isFinite(o.weight)
+      ? [{ name: o.name, axis: o.axis, score: o.score, weight: o.weight }]
+      : [];
+  });
   const row = {
     item: item.trim(),
     price,
@@ -78,6 +90,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     can,
     should,
     punch,
+    signals: signals.length ? signals : null,
     source: "web",
   };
 

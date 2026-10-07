@@ -1,0 +1,2122 @@
+[
+ {
+  "input": {
+   "a": {
+    "price": 4,
+    "income": 1000,
+    "household": "solo",
+    "use": "daily",
+    "replaces": "broken",
+    "wanted": "years",
+    "ifnot": "worse"
+   }
+  },
+  "expect": {
+   "key": "tiny",
+   "title": "Yes. Obviously.",
+   "can": true,
+   "should": true,
+   "need": 12,
+   "pct": 0
+  }
+ },
+ {
+  "input": {
+   "a": {
+    "price": 4,
+    "income": 1000,
+    "household": "partner",
+    "use": "once",
+    "replaces": "fine",
+    "wanted": "someone",
+    "ifnot": "nothing"
+   }
+  },
+  "expect": {
+   "key": "tiny",
+   "title": "Yes. Obviously.",
+   "can": true,
+   "should": true,
+   "need": -1,
+   "pct": 0
+  }
+ },
+ {
+  "input": {
+   "a": {
+    "price": 4,
+    "income": 1000,
+    "household": "family",
+    "use": "weekly",
+    "replaces": "new",
+    "wanted": "weeks",
+    "ifnot": "sad"
+   }
+  },
+  "expect": {
+   "key": "tiny",
+   "title": "Yes. Obviously.",
+   "can": true,
+   "should": true,
+   "need": 6,
+   "pct": 0
+  }
+ },
+ {
+  "input": {
+   "a": {
+    "price": 4,
+    "income": 1000,
+    "household": "parents",
+    "use": "daily",
+    "replaces": "habit",
+    "wanted": "weeks",
+    "ifnot": "asking"
+   }
+  },
+  "expect": {
+   "key": "tiny",
+   "title": "Yes. Obviously.",
+   "can": true,
+   "should": true,
+   "need": 9,
+   "pct": 0
+  }
+ },
+ {
+  "input": {
+   "a": {
+    "price": 100,
+    "income": 1000,
+    "household": "solo",
+    "use": "daily",
+    "replaces": "broken",
+    "wanted": "years",
+    "ifnot": "worse"
+   }
+  },
+  "expect": {
+   "key": "buy",
+   "title": "Buy it",
+   "can": true,
+   "should": true,
+   "need": 12,
+   "pct": 10
+  }
+ },
+ {
+  "input": {
+   "a": {
+    "price": 100,
+    "income": 1000,
+    "household": "partner",
+    "use": "once",
+    "replaces": "fine",
+    "wanted": "someone",
+    "ifnot": "nothing"
+   }
+  },
+  "expect": {
+   "key": "why",
+   "title": "You can. But why?",
+   "can": true,
+   "should": false,
+   "need": -1,
+   "pct": 10
+  }
+ },
+ {
+  "input": {
+   "a": {
+    "price": 100,
+    "income": 1000,
+    "household": "family",
+    "use": "weekly",
+    "replaces": "new",
+    "wanted": "weeks",
+    "ifnot": "sad"
+   }
+  },
+  "expect": {
+   "key": "buy",
+   "title": "Buy it",
+   "can": true,
+   "should": true,
+   "need": 6,
+   "pct": 10
+  }
+ },
+ {
+  "input": {
+   "a": {
+    "price": 100,
+    "income": 1000,
+    "household": "parents",
+    "use": "daily",
+    "replaces": "habit",
+    "wanted": "weeks",
+    "ifnot": "asking"
+   }
+  },
+  "expect": {
+   "key": "buy",
+   "title": "Buy it",
+   "can": true,
+   "should": true,
+   "need": 9,
+   "pct": 10
+  }
+ },
+ {
+  "input": {
+   "a": {
+    "price": 300,
+    "income": 1000,
+    "household": "solo",
+    "use": "daily",
+    "replaces": "broken",
+    "wanted": "years",
+    "ifnot": "worse"
+   }
+  },
+  "expect": {
+   "key": "buy",
+   "title": "Buy it",
+   "can": true,
+   "should": true,
+   "need": 12,
+   "pct": 30
+  }
+ },
+ {
+  "input": {
+   "a": {
+    "price": 300,
+    "income": 1000,
+    "household": "partner",
+    "use": "once",
+    "replaces": "fine",
+    "wanted": "someone",
+    "ifnot": "nothing"
+   }
+  },
+  "expect": {
+   "key": "why",
+   "title": "You can. But why?",
+   "can": true,
+   "should": false,
+   "need": -1,
+   "pct": 30
+  }
+ },
+ {
+  "input": {
+   "a": {
+    "price": 300,
+    "income": 1000,
+    "household": "family",
+    "use": "weekly",
+    "replaces": "new",
+    "wanted": "weeks",
+    "ifnot": "sad"
+   }
+  },
+  "expect": {
+   "key": "buy",
+   "title": "Buy it",
+   "can": true,
+   "should": true,
+   "need": 6,
+   "pct": 30
+  }
+ },
+ {
+  "input": {
+   "a": {
+    "price": 300,
+    "income": 1000,
+    "household": "parents",
+    "use": "daily",
+    "replaces": "habit",
+    "wanted": "weeks",
+    "ifnot": "asking"
+   }
+  },
+  "expect": {
+   "key": "buy",
+   "title": "Buy it",
+   "can": true,
+   "should": true,
+   "need": 9,
+   "pct": 30
+  }
+ },
+ {
+  "input": {
+   "a": {
+    "price": 400,
+    "income": 1000,
+    "household": "solo",
+    "use": "daily",
+    "replaces": "broken",
+    "wanted": "years",
+    "ifnot": "worse"
+   }
+  },
+  "expect": {
+   "key": "save",
+   "title": "Save for it",
+   "can": false,
+   "should": true,
+   "need": 12,
+   "pct": 40
+  }
+ },
+ {
+  "input": {
+   "a": {
+    "price": 400,
+    "income": 1000,
+    "household": "partner",
+    "use": "once",
+    "replaces": "fine",
+    "wanted": "someone",
+    "ifnot": "nothing"
+   }
+  },
+  "expect": {
+   "key": "no",
+   "title": "Absolutely not",
+   "can": false,
+   "should": false,
+   "need": -1,
+   "pct": 40
+  }
+ },
+ {
+  "input": {
+   "a": {
+    "price": 400,
+    "income": 1000,
+    "household": "family",
+    "use": "weekly",
+    "replaces": "new",
+    "wanted": "weeks",
+    "ifnot": "sad"
+   }
+  },
+  "expect": {
+   "key": "save",
+   "title": "Save for it",
+   "can": false,
+   "should": true,
+   "need": 6,
+   "pct": 40
+  }
+ },
+ {
+  "input": {
+   "a": {
+    "price": 400,
+    "income": 1000,
+    "household": "parents",
+    "use": "daily",
+    "replaces": "habit",
+    "wanted": "weeks",
+    "ifnot": "asking"
+   }
+  },
+  "expect": {
+   "key": "save",
+   "title": "Save for it",
+   "can": false,
+   "should": true,
+   "need": 9,
+   "pct": 40
+  }
+ },
+ {
+  "input": {
+   "a": {
+    "price": 800,
+    "income": 1000,
+    "household": "solo",
+    "use": "daily",
+    "replaces": "broken",
+    "wanted": "years",
+    "ifnot": "worse"
+   }
+  },
+  "expect": {
+   "key": "save",
+   "title": "Save for it",
+   "can": false,
+   "should": true,
+   "need": 12,
+   "pct": 80
+  }
+ },
+ {
+  "input": {
+   "a": {
+    "price": 800,
+    "income": 1000,
+    "household": "partner",
+    "use": "once",
+    "replaces": "fine",
+    "wanted": "someone",
+    "ifnot": "nothing"
+   }
+  },
+  "expect": {
+   "key": "no",
+   "title": "Absolutely not",
+   "can": false,
+   "should": false,
+   "need": -1,
+   "pct": 80
+  }
+ },
+ {
+  "input": {
+   "a": {
+    "price": 800,
+    "income": 1000,
+    "household": "family",
+    "use": "weekly",
+    "replaces": "new",
+    "wanted": "weeks",
+    "ifnot": "sad"
+   }
+  },
+  "expect": {
+   "key": "save",
+   "title": "Save for it",
+   "can": false,
+   "should": true,
+   "need": 6,
+   "pct": 80
+  }
+ },
+ {
+  "input": {
+   "a": {
+    "price": 800,
+    "income": 1000,
+    "household": "parents",
+    "use": "daily",
+    "replaces": "habit",
+    "wanted": "weeks",
+    "ifnot": "asking"
+   }
+  },
+  "expect": {
+   "key": "save",
+   "title": "Save for it",
+   "can": false,
+   "should": true,
+   "need": 9,
+   "pct": 80
+  }
+ },
+ {
+  "input": {
+   "a": {
+    "price": 1600,
+    "income": 1000,
+    "household": "solo",
+    "use": "daily",
+    "replaces": "broken",
+    "wanted": "years",
+    "ifnot": "worse"
+   }
+  },
+  "expect": {
+   "key": "no",
+   "title": "Absolutely not",
+   "can": false,
+   "should": false,
+   "need": 12,
+   "pct": 160
+  }
+ },
+ {
+  "input": {
+   "a": {
+    "price": 1600,
+    "income": 1000,
+    "household": "partner",
+    "use": "once",
+    "replaces": "fine",
+    "wanted": "someone",
+    "ifnot": "nothing"
+   }
+  },
+  "expect": {
+   "key": "no",
+   "title": "Absolutely not",
+   "can": false,
+   "should": false,
+   "need": -1,
+   "pct": 160
+  }
+ },
+ {
+  "input": {
+   "a": {
+    "price": 1600,
+    "income": 1000,
+    "household": "family",
+    "use": "weekly",
+    "replaces": "new",
+    "wanted": "weeks",
+    "ifnot": "sad"
+   }
+  },
+  "expect": {
+   "key": "no",
+   "title": "Absolutely not",
+   "can": false,
+   "should": false,
+   "need": 6,
+   "pct": 160
+  }
+ },
+ {
+  "input": {
+   "a": {
+    "price": 1600,
+    "income": 1000,
+    "household": "parents",
+    "use": "daily",
+    "replaces": "habit",
+    "wanted": "weeks",
+    "ifnot": "asking"
+   }
+  },
+  "expect": {
+   "key": "no",
+   "title": "Absolutely not",
+   "can": false,
+   "should": false,
+   "need": 9,
+   "pct": 160
+  }
+ },
+ {
+  "input": {
+   "a": {
+    "price": 30000,
+    "income": 1000,
+    "household": "solo",
+    "use": "daily",
+    "replaces": "broken",
+    "wanted": "years",
+    "ifnot": "worse"
+   }
+  },
+  "expect": {
+   "key": "dream",
+   "title": "Be serious.",
+   "can": false,
+   "should": false,
+   "need": 12,
+   "pct": 3000
+  }
+ },
+ {
+  "input": {
+   "a": {
+    "price": 30000,
+    "income": 1000,
+    "household": "partner",
+    "use": "once",
+    "replaces": "fine",
+    "wanted": "someone",
+    "ifnot": "nothing"
+   }
+  },
+  "expect": {
+   "key": "dream",
+   "title": "Be serious.",
+   "can": false,
+   "should": false,
+   "need": -1,
+   "pct": 3000
+  }
+ },
+ {
+  "input": {
+   "a": {
+    "price": 30000,
+    "income": 1000,
+    "household": "family",
+    "use": "weekly",
+    "replaces": "new",
+    "wanted": "weeks",
+    "ifnot": "sad"
+   }
+  },
+  "expect": {
+   "key": "dream",
+   "title": "Be serious.",
+   "can": false,
+   "should": false,
+   "need": 6,
+   "pct": 3000
+  }
+ },
+ {
+  "input": {
+   "a": {
+    "price": 30000,
+    "income": 1000,
+    "household": "parents",
+    "use": "daily",
+    "replaces": "habit",
+    "wanted": "weeks",
+    "ifnot": "asking"
+   }
+  },
+  "expect": {
+   "key": "dream",
+   "title": "Be serious.",
+   "can": false,
+   "should": false,
+   "need": 9,
+   "pct": 3000
+  }
+ },
+ {
+  "input": {
+   "a": {
+    "price": 16,
+    "income": 4000,
+    "household": "solo",
+    "use": "daily",
+    "replaces": "broken",
+    "wanted": "years",
+    "ifnot": "worse"
+   }
+  },
+  "expect": {
+   "key": "tiny",
+   "title": "Yes. Obviously.",
+   "can": true,
+   "should": true,
+   "need": 12,
+   "pct": 0
+  }
+ },
+ {
+  "input": {
+   "a": {
+    "price": 16,
+    "income": 4000,
+    "household": "partner",
+    "use": "once",
+    "replaces": "fine",
+    "wanted": "someone",
+    "ifnot": "nothing"
+   }
+  },
+  "expect": {
+   "key": "tiny",
+   "title": "Yes. Obviously.",
+   "can": true,
+   "should": true,
+   "need": -1,
+   "pct": 0
+  }
+ },
+ {
+  "input": {
+   "a": {
+    "price": 16,
+    "income": 4000,
+    "household": "family",
+    "use": "weekly",
+    "replaces": "new",
+    "wanted": "weeks",
+    "ifnot": "sad"
+   }
+  },
+  "expect": {
+   "key": "tiny",
+   "title": "Yes. Obviously.",
+   "can": true,
+   "should": true,
+   "need": 6,
+   "pct": 0
+  }
+ },
+ {
+  "input": {
+   "a": {
+    "price": 16,
+    "income": 4000,
+    "household": "parents",
+    "use": "daily",
+    "replaces": "habit",
+    "wanted": "weeks",
+    "ifnot": "asking"
+   }
+  },
+  "expect": {
+   "key": "tiny",
+   "title": "Yes. Obviously.",
+   "can": true,
+   "should": true,
+   "need": 9,
+   "pct": 0
+  }
+ },
+ {
+  "input": {
+   "a": {
+    "price": 400,
+    "income": 4000,
+    "household": "solo",
+    "use": "daily",
+    "replaces": "broken",
+    "wanted": "years",
+    "ifnot": "worse"
+   }
+  },
+  "expect": {
+   "key": "buy",
+   "title": "Buy it",
+   "can": true,
+   "should": true,
+   "need": 12,
+   "pct": 10
+  }
+ },
+ {
+  "input": {
+   "a": {
+    "price": 400,
+    "income": 4000,
+    "household": "partner",
+    "use": "once",
+    "replaces": "fine",
+    "wanted": "someone",
+    "ifnot": "nothing"
+   }
+  },
+  "expect": {
+   "key": "why",
+   "title": "You can. But why?",
+   "can": true,
+   "should": false,
+   "need": -1,
+   "pct": 10
+  }
+ },
+ {
+  "input": {
+   "a": {
+    "price": 400,
+    "income": 4000,
+    "household": "family",
+    "use": "weekly",
+    "replaces": "new",
+    "wanted": "weeks",
+    "ifnot": "sad"
+   }
+  },
+  "expect": {
+   "key": "buy",
+   "title": "Buy it",
+   "can": true,
+   "should": true,
+   "need": 6,
+   "pct": 10
+  }
+ },
+ {
+  "input": {
+   "a": {
+    "price": 400,
+    "income": 4000,
+    "household": "parents",
+    "use": "daily",
+    "replaces": "habit",
+    "wanted": "weeks",
+    "ifnot": "asking"
+   }
+  },
+  "expect": {
+   "key": "buy",
+   "title": "Buy it",
+   "can": true,
+   "should": true,
+   "need": 9,
+   "pct": 10
+  }
+ },
+ {
+  "input": {
+   "a": {
+    "price": 1200,
+    "income": 4000,
+    "household": "solo",
+    "use": "daily",
+    "replaces": "broken",
+    "wanted": "years",
+    "ifnot": "worse"
+   }
+  },
+  "expect": {
+   "key": "buy",
+   "title": "Buy it",
+   "can": true,
+   "should": true,
+   "need": 12,
+   "pct": 30
+  }
+ },
+ {
+  "input": {
+   "a": {
+    "price": 1200,
+    "income": 4000,
+    "household": "partner",
+    "use": "once",
+    "replaces": "fine",
+    "wanted": "someone",
+    "ifnot": "nothing"
+   }
+  },
+  "expect": {
+   "key": "why",
+   "title": "You can. But why?",
+   "can": true,
+   "should": false,
+   "need": -1,
+   "pct": 30
+  }
+ },
+ {
+  "input": {
+   "a": {
+    "price": 1200,
+    "income": 4000,
+    "household": "family",
+    "use": "weekly",
+    "replaces": "new",
+    "wanted": "weeks",
+    "ifnot": "sad"
+   }
+  },
+  "expect": {
+   "key": "buy",
+   "title": "Buy it",
+   "can": true,
+   "should": true,
+   "need": 6,
+   "pct": 30
+  }
+ },
+ {
+  "input": {
+   "a": {
+    "price": 1200,
+    "income": 4000,
+    "household": "parents",
+    "use": "daily",
+    "replaces": "habit",
+    "wanted": "weeks",
+    "ifnot": "asking"
+   }
+  },
+  "expect": {
+   "key": "buy",
+   "title": "Buy it",
+   "can": true,
+   "should": true,
+   "need": 9,
+   "pct": 30
+  }
+ },
+ {
+  "input": {
+   "a": {
+    "price": 1600,
+    "income": 4000,
+    "household": "solo",
+    "use": "daily",
+    "replaces": "broken",
+    "wanted": "years",
+    "ifnot": "worse"
+   }
+  },
+  "expect": {
+   "key": "save",
+   "title": "Save for it",
+   "can": false,
+   "should": true,
+   "need": 12,
+   "pct": 40
+  }
+ },
+ {
+  "input": {
+   "a": {
+    "price": 1600,
+    "income": 4000,
+    "household": "partner",
+    "use": "once",
+    "replaces": "fine",
+    "wanted": "someone",
+    "ifnot": "nothing"
+   }
+  },
+  "expect": {
+   "key": "no",
+   "title": "Absolutely not",
+   "can": false,
+   "should": false,
+   "need": -1,
+   "pct": 40
+  }
+ },
+ {
+  "input": {
+   "a": {
+    "price": 1600,
+    "income": 4000,
+    "household": "family",
+    "use": "weekly",
+    "replaces": "new",
+    "wanted": "weeks",
+    "ifnot": "sad"
+   }
+  },
+  "expect": {
+   "key": "save",
+   "title": "Save for it",
+   "can": false,
+   "should": true,
+   "need": 6,
+   "pct": 40
+  }
+ },
+ {
+  "input": {
+   "a": {
+    "price": 1600,
+    "income": 4000,
+    "household": "parents",
+    "use": "daily",
+    "replaces": "habit",
+    "wanted": "weeks",
+    "ifnot": "asking"
+   }
+  },
+  "expect": {
+   "key": "save",
+   "title": "Save for it",
+   "can": false,
+   "should": true,
+   "need": 9,
+   "pct": 40
+  }
+ },
+ {
+  "input": {
+   "a": {
+    "price": 3200,
+    "income": 4000,
+    "household": "solo",
+    "use": "daily",
+    "replaces": "broken",
+    "wanted": "years",
+    "ifnot": "worse"
+   }
+  },
+  "expect": {
+   "key": "save",
+   "title": "Save for it",
+   "can": false,
+   "should": true,
+   "need": 12,
+   "pct": 80
+  }
+ },
+ {
+  "input": {
+   "a": {
+    "price": 3200,
+    "income": 4000,
+    "household": "partner",
+    "use": "once",
+    "replaces": "fine",
+    "wanted": "someone",
+    "ifnot": "nothing"
+   }
+  },
+  "expect": {
+   "key": "no",
+   "title": "Absolutely not",
+   "can": false,
+   "should": false,
+   "need": -1,
+   "pct": 80
+  }
+ },
+ {
+  "input": {
+   "a": {
+    "price": 3200,
+    "income": 4000,
+    "household": "family",
+    "use": "weekly",
+    "replaces": "new",
+    "wanted": "weeks",
+    "ifnot": "sad"
+   }
+  },
+  "expect": {
+   "key": "save",
+   "title": "Save for it",
+   "can": false,
+   "should": true,
+   "need": 6,
+   "pct": 80
+  }
+ },
+ {
+  "input": {
+   "a": {
+    "price": 3200,
+    "income": 4000,
+    "household": "parents",
+    "use": "daily",
+    "replaces": "habit",
+    "wanted": "weeks",
+    "ifnot": "asking"
+   }
+  },
+  "expect": {
+   "key": "save",
+   "title": "Save for it",
+   "can": false,
+   "should": true,
+   "need": 9,
+   "pct": 80
+  }
+ },
+ {
+  "input": {
+   "a": {
+    "price": 6400,
+    "income": 4000,
+    "household": "solo",
+    "use": "daily",
+    "replaces": "broken",
+    "wanted": "years",
+    "ifnot": "worse"
+   }
+  },
+  "expect": {
+   "key": "no",
+   "title": "Absolutely not",
+   "can": false,
+   "should": false,
+   "need": 12,
+   "pct": 160
+  }
+ },
+ {
+  "input": {
+   "a": {
+    "price": 6400,
+    "income": 4000,
+    "household": "partner",
+    "use": "once",
+    "replaces": "fine",
+    "wanted": "someone",
+    "ifnot": "nothing"
+   }
+  },
+  "expect": {
+   "key": "no",
+   "title": "Absolutely not",
+   "can": false,
+   "should": false,
+   "need": -1,
+   "pct": 160
+  }
+ },
+ {
+  "input": {
+   "a": {
+    "price": 6400,
+    "income": 4000,
+    "household": "family",
+    "use": "weekly",
+    "replaces": "new",
+    "wanted": "weeks",
+    "ifnot": "sad"
+   }
+  },
+  "expect": {
+   "key": "no",
+   "title": "Absolutely not",
+   "can": false,
+   "should": false,
+   "need": 6,
+   "pct": 160
+  }
+ },
+ {
+  "input": {
+   "a": {
+    "price": 6400,
+    "income": 4000,
+    "household": "parents",
+    "use": "daily",
+    "replaces": "habit",
+    "wanted": "weeks",
+    "ifnot": "asking"
+   }
+  },
+  "expect": {
+   "key": "no",
+   "title": "Absolutely not",
+   "can": false,
+   "should": false,
+   "need": 9,
+   "pct": 160
+  }
+ },
+ {
+  "input": {
+   "a": {
+    "price": 120000,
+    "income": 4000,
+    "household": "solo",
+    "use": "daily",
+    "replaces": "broken",
+    "wanted": "years",
+    "ifnot": "worse"
+   }
+  },
+  "expect": {
+   "key": "dream",
+   "title": "Be serious.",
+   "can": false,
+   "should": false,
+   "need": 12,
+   "pct": 3000
+  }
+ },
+ {
+  "input": {
+   "a": {
+    "price": 120000,
+    "income": 4000,
+    "household": "partner",
+    "use": "once",
+    "replaces": "fine",
+    "wanted": "someone",
+    "ifnot": "nothing"
+   }
+  },
+  "expect": {
+   "key": "dream",
+   "title": "Be serious.",
+   "can": false,
+   "should": false,
+   "need": -1,
+   "pct": 3000
+  }
+ },
+ {
+  "input": {
+   "a": {
+    "price": 120000,
+    "income": 4000,
+    "household": "family",
+    "use": "weekly",
+    "replaces": "new",
+    "wanted": "weeks",
+    "ifnot": "sad"
+   }
+  },
+  "expect": {
+   "key": "dream",
+   "title": "Be serious.",
+   "can": false,
+   "should": false,
+   "need": 6,
+   "pct": 3000
+  }
+ },
+ {
+  "input": {
+   "a": {
+    "price": 120000,
+    "income": 4000,
+    "household": "parents",
+    "use": "daily",
+    "replaces": "habit",
+    "wanted": "weeks",
+    "ifnot": "asking"
+   }
+  },
+  "expect": {
+   "key": "dream",
+   "title": "Be serious.",
+   "can": false,
+   "should": false,
+   "need": 9,
+   "pct": 3000
+  }
+ },
+ {
+  "input": {
+   "a": {
+    "price": 48,
+    "income": 12000,
+    "household": "solo",
+    "use": "daily",
+    "replaces": "broken",
+    "wanted": "years",
+    "ifnot": "worse"
+   }
+  },
+  "expect": {
+   "key": "tiny",
+   "title": "Yes. Obviously.",
+   "can": true,
+   "should": true,
+   "need": 12,
+   "pct": 0
+  }
+ },
+ {
+  "input": {
+   "a": {
+    "price": 48,
+    "income": 12000,
+    "household": "partner",
+    "use": "once",
+    "replaces": "fine",
+    "wanted": "someone",
+    "ifnot": "nothing"
+   }
+  },
+  "expect": {
+   "key": "tiny",
+   "title": "Yes. Obviously.",
+   "can": true,
+   "should": true,
+   "need": -1,
+   "pct": 0
+  }
+ },
+ {
+  "input": {
+   "a": {
+    "price": 48,
+    "income": 12000,
+    "household": "family",
+    "use": "weekly",
+    "replaces": "new",
+    "wanted": "weeks",
+    "ifnot": "sad"
+   }
+  },
+  "expect": {
+   "key": "tiny",
+   "title": "Yes. Obviously.",
+   "can": true,
+   "should": true,
+   "need": 6,
+   "pct": 0
+  }
+ },
+ {
+  "input": {
+   "a": {
+    "price": 48,
+    "income": 12000,
+    "household": "parents",
+    "use": "daily",
+    "replaces": "habit",
+    "wanted": "weeks",
+    "ifnot": "asking"
+   }
+  },
+  "expect": {
+   "key": "tiny",
+   "title": "Yes. Obviously.",
+   "can": true,
+   "should": true,
+   "need": 9,
+   "pct": 0
+  }
+ },
+ {
+  "input": {
+   "a": {
+    "price": 1200,
+    "income": 12000,
+    "household": "solo",
+    "use": "daily",
+    "replaces": "broken",
+    "wanted": "years",
+    "ifnot": "worse"
+   }
+  },
+  "expect": {
+   "key": "buy",
+   "title": "Buy it",
+   "can": true,
+   "should": true,
+   "need": 12,
+   "pct": 10
+  }
+ },
+ {
+  "input": {
+   "a": {
+    "price": 1200,
+    "income": 12000,
+    "household": "partner",
+    "use": "once",
+    "replaces": "fine",
+    "wanted": "someone",
+    "ifnot": "nothing"
+   }
+  },
+  "expect": {
+   "key": "why",
+   "title": "You can. But why?",
+   "can": true,
+   "should": false,
+   "need": -1,
+   "pct": 10
+  }
+ },
+ {
+  "input": {
+   "a": {
+    "price": 1200,
+    "income": 12000,
+    "household": "family",
+    "use": "weekly",
+    "replaces": "new",
+    "wanted": "weeks",
+    "ifnot": "sad"
+   }
+  },
+  "expect": {
+   "key": "buy",
+   "title": "Buy it",
+   "can": true,
+   "should": true,
+   "need": 6,
+   "pct": 10
+  }
+ },
+ {
+  "input": {
+   "a": {
+    "price": 1200,
+    "income": 12000,
+    "household": "parents",
+    "use": "daily",
+    "replaces": "habit",
+    "wanted": "weeks",
+    "ifnot": "asking"
+   }
+  },
+  "expect": {
+   "key": "buy",
+   "title": "Buy it",
+   "can": true,
+   "should": true,
+   "need": 9,
+   "pct": 10
+  }
+ },
+ {
+  "input": {
+   "a": {
+    "price": 3600,
+    "income": 12000,
+    "household": "solo",
+    "use": "daily",
+    "replaces": "broken",
+    "wanted": "years",
+    "ifnot": "worse"
+   }
+  },
+  "expect": {
+   "key": "buy",
+   "title": "Buy it",
+   "can": true,
+   "should": true,
+   "need": 12,
+   "pct": 30
+  }
+ },
+ {
+  "input": {
+   "a": {
+    "price": 3600,
+    "income": 12000,
+    "household": "partner",
+    "use": "once",
+    "replaces": "fine",
+    "wanted": "someone",
+    "ifnot": "nothing"
+   }
+  },
+  "expect": {
+   "key": "why",
+   "title": "You can. But why?",
+   "can": true,
+   "should": false,
+   "need": -1,
+   "pct": 30
+  }
+ },
+ {
+  "input": {
+   "a": {
+    "price": 3600,
+    "income": 12000,
+    "household": "family",
+    "use": "weekly",
+    "replaces": "new",
+    "wanted": "weeks",
+    "ifnot": "sad"
+   }
+  },
+  "expect": {
+   "key": "buy",
+   "title": "Buy it",
+   "can": true,
+   "should": true,
+   "need": 6,
+   "pct": 30
+  }
+ },
+ {
+  "input": {
+   "a": {
+    "price": 3600,
+    "income": 12000,
+    "household": "parents",
+    "use": "daily",
+    "replaces": "habit",
+    "wanted": "weeks",
+    "ifnot": "asking"
+   }
+  },
+  "expect": {
+   "key": "buy",
+   "title": "Buy it",
+   "can": true,
+   "should": true,
+   "need": 9,
+   "pct": 30
+  }
+ },
+ {
+  "input": {
+   "a": {
+    "price": 4800,
+    "income": 12000,
+    "household": "solo",
+    "use": "daily",
+    "replaces": "broken",
+    "wanted": "years",
+    "ifnot": "worse"
+   }
+  },
+  "expect": {
+   "key": "save",
+   "title": "Save for it",
+   "can": false,
+   "should": true,
+   "need": 12,
+   "pct": 40
+  }
+ },
+ {
+  "input": {
+   "a": {
+    "price": 4800,
+    "income": 12000,
+    "household": "partner",
+    "use": "once",
+    "replaces": "fine",
+    "wanted": "someone",
+    "ifnot": "nothing"
+   }
+  },
+  "expect": {
+   "key": "no",
+   "title": "Absolutely not",
+   "can": false,
+   "should": false,
+   "need": -1,
+   "pct": 40
+  }
+ },
+ {
+  "input": {
+   "a": {
+    "price": 4800,
+    "income": 12000,
+    "household": "family",
+    "use": "weekly",
+    "replaces": "new",
+    "wanted": "weeks",
+    "ifnot": "sad"
+   }
+  },
+  "expect": {
+   "key": "save",
+   "title": "Save for it",
+   "can": false,
+   "should": true,
+   "need": 6,
+   "pct": 40
+  }
+ },
+ {
+  "input": {
+   "a": {
+    "price": 4800,
+    "income": 12000,
+    "household": "parents",
+    "use": "daily",
+    "replaces": "habit",
+    "wanted": "weeks",
+    "ifnot": "asking"
+   }
+  },
+  "expect": {
+   "key": "save",
+   "title": "Save for it",
+   "can": false,
+   "should": true,
+   "need": 9,
+   "pct": 40
+  }
+ },
+ {
+  "input": {
+   "a": {
+    "price": 9600,
+    "income": 12000,
+    "household": "solo",
+    "use": "daily",
+    "replaces": "broken",
+    "wanted": "years",
+    "ifnot": "worse"
+   }
+  },
+  "expect": {
+   "key": "save",
+   "title": "Save for it",
+   "can": false,
+   "should": true,
+   "need": 12,
+   "pct": 80
+  }
+ },
+ {
+  "input": {
+   "a": {
+    "price": 9600,
+    "income": 12000,
+    "household": "partner",
+    "use": "once",
+    "replaces": "fine",
+    "wanted": "someone",
+    "ifnot": "nothing"
+   }
+  },
+  "expect": {
+   "key": "no",
+   "title": "Absolutely not",
+   "can": false,
+   "should": false,
+   "need": -1,
+   "pct": 80
+  }
+ },
+ {
+  "input": {
+   "a": {
+    "price": 9600,
+    "income": 12000,
+    "household": "family",
+    "use": "weekly",
+    "replaces": "new",
+    "wanted": "weeks",
+    "ifnot": "sad"
+   }
+  },
+  "expect": {
+   "key": "save",
+   "title": "Save for it",
+   "can": false,
+   "should": true,
+   "need": 6,
+   "pct": 80
+  }
+ },
+ {
+  "input": {
+   "a": {
+    "price": 9600,
+    "income": 12000,
+    "household": "parents",
+    "use": "daily",
+    "replaces": "habit",
+    "wanted": "weeks",
+    "ifnot": "asking"
+   }
+  },
+  "expect": {
+   "key": "save",
+   "title": "Save for it",
+   "can": false,
+   "should": true,
+   "need": 9,
+   "pct": 80
+  }
+ },
+ {
+  "input": {
+   "a": {
+    "price": 19200,
+    "income": 12000,
+    "household": "solo",
+    "use": "daily",
+    "replaces": "broken",
+    "wanted": "years",
+    "ifnot": "worse"
+   }
+  },
+  "expect": {
+   "key": "no",
+   "title": "Absolutely not",
+   "can": false,
+   "should": false,
+   "need": 12,
+   "pct": 160
+  }
+ },
+ {
+  "input": {
+   "a": {
+    "price": 19200,
+    "income": 12000,
+    "household": "partner",
+    "use": "once",
+    "replaces": "fine",
+    "wanted": "someone",
+    "ifnot": "nothing"
+   }
+  },
+  "expect": {
+   "key": "no",
+   "title": "Absolutely not",
+   "can": false,
+   "should": false,
+   "need": -1,
+   "pct": 160
+  }
+ },
+ {
+  "input": {
+   "a": {
+    "price": 19200,
+    "income": 12000,
+    "household": "family",
+    "use": "weekly",
+    "replaces": "new",
+    "wanted": "weeks",
+    "ifnot": "sad"
+   }
+  },
+  "expect": {
+   "key": "no",
+   "title": "Absolutely not",
+   "can": false,
+   "should": false,
+   "need": 6,
+   "pct": 160
+  }
+ },
+ {
+  "input": {
+   "a": {
+    "price": 19200,
+    "income": 12000,
+    "household": "parents",
+    "use": "daily",
+    "replaces": "habit",
+    "wanted": "weeks",
+    "ifnot": "asking"
+   }
+  },
+  "expect": {
+   "key": "no",
+   "title": "Absolutely not",
+   "can": false,
+   "should": false,
+   "need": 9,
+   "pct": 160
+  }
+ },
+ {
+  "input": {
+   "a": {
+    "price": 360000,
+    "income": 12000,
+    "household": "solo",
+    "use": "daily",
+    "replaces": "broken",
+    "wanted": "years",
+    "ifnot": "worse"
+   }
+  },
+  "expect": {
+   "key": "dream",
+   "title": "Be serious.",
+   "can": false,
+   "should": false,
+   "need": 12,
+   "pct": 3000
+  }
+ },
+ {
+  "input": {
+   "a": {
+    "price": 360000,
+    "income": 12000,
+    "household": "partner",
+    "use": "once",
+    "replaces": "fine",
+    "wanted": "someone",
+    "ifnot": "nothing"
+   }
+  },
+  "expect": {
+   "key": "dream",
+   "title": "Be serious.",
+   "can": false,
+   "should": false,
+   "need": -1,
+   "pct": 3000
+  }
+ },
+ {
+  "input": {
+   "a": {
+    "price": 360000,
+    "income": 12000,
+    "household": "family",
+    "use": "weekly",
+    "replaces": "new",
+    "wanted": "weeks",
+    "ifnot": "sad"
+   }
+  },
+  "expect": {
+   "key": "dream",
+   "title": "Be serious.",
+   "can": false,
+   "should": false,
+   "need": 6,
+   "pct": 3000
+  }
+ },
+ {
+  "input": {
+   "a": {
+    "price": 360000,
+    "income": 12000,
+    "household": "parents",
+    "use": "daily",
+    "replaces": "habit",
+    "wanted": "weeks",
+    "ifnot": "asking"
+   }
+  },
+  "expect": {
+   "key": "dream",
+   "title": "Be serious.",
+   "can": false,
+   "should": false,
+   "need": 9,
+   "pct": 3000
+  }
+ },
+ {
+  "input": {
+   "a": {
+    "price": 5,
+    "income": 4000,
+    "household": "family",
+    "use": "weekly",
+    "replaces": "new",
+    "wanted": "weeks",
+    "ifnot": "sad"
+   },
+   "item": "ice cream"
+  },
+  "expect": {
+   "key": "tiny",
+   "title": "Yes. Obviously.",
+   "can": true,
+   "should": true,
+   "need": 6,
+   "pct": 0
+  }
+ },
+ {
+  "input": {
+   "a": {
+    "price": 80,
+    "income": 4000,
+    "household": "family",
+    "use": "daily",
+    "replaces": "new",
+    "wanted": "weeks",
+    "ifnot": "sad"
+   },
+   "item": "a vibrator"
+  },
+  "expect": {
+   "key": "buy",
+   "title": "Buy it",
+   "can": true,
+   "should": true,
+   "need": 7,
+   "pct": 2
+  }
+ },
+ {
+  "input": {
+   "a": {
+    "price": 80,
+    "income": 4000,
+    "household": "family",
+    "use": "daily",
+    "replaces": "new",
+    "wanted": "weeks",
+    "ifnot": "sad"
+   },
+   "item": "Satisfyer Pro 2",
+   "category": "Sex Toys"
+  },
+  "expect": {
+   "key": "buy",
+   "title": "Buy it",
+   "can": true,
+   "should": true,
+   "need": 7,
+   "pct": 2
+  }
+ },
+ {
+  "input": {
+   "a": {
+    "price": 500,
+    "income": 4000,
+    "household": "family",
+    "use": "weekly",
+    "replaces": "new",
+    "wanted": "weeks",
+    "ifnot": "sad"
+   },
+   "item": "a dog"
+  },
+  "expect": {
+   "key": "buy",
+   "title": "Buy it",
+   "can": true,
+   "should": true,
+   "need": 6,
+   "pct": 13
+  }
+ },
+ {
+  "input": {
+   "a": {
+    "price": 8000,
+    "income": 4000,
+    "household": "family",
+    "use": "weekly",
+    "replaces": "new",
+    "wanted": "weeks",
+    "ifnot": "sad"
+   },
+   "item": "a dog"
+  },
+  "expect": {
+   "key": "no",
+   "title": "Absolutely not",
+   "can": false,
+   "should": false,
+   "need": 6,
+   "pct": 200
+  }
+ },
+ {
+  "input": {
+   "a": {
+    "price": 1000,
+    "income": 4000,
+    "household": "family",
+    "use": "daily",
+    "replaces": "new",
+    "wanted": "years",
+    "ifnot": "sad"
+   },
+   "item": "a second kid"
+  },
+  "expect": {
+   "key": "buy",
+   "title": "Buy it",
+   "can": true,
+   "should": true,
+   "need": 8,
+   "pct": 25
+  }
+ },
+ {
+  "input": {
+   "a": {
+    "price": 30000,
+    "income": 4000,
+    "household": "family",
+    "use": "once",
+    "replaces": "new",
+    "wanted": "weeks",
+    "ifnot": "sad"
+   },
+   "item": "a wedding"
+  },
+  "expect": {
+   "key": "no",
+   "title": "Absolutely not",
+   "can": false,
+   "should": false,
+   "need": 4,
+   "pct": 750
+  }
+ },
+ {
+  "input": {
+   "a": {
+    "price": 5000,
+    "income": 4000,
+    "household": "family",
+    "use": "weekly",
+    "replaces": "fine",
+    "wanted": "weeks",
+    "ifnot": "sad"
+   },
+   "item": "a divorce"
+  },
+  "expect": {
+   "key": "save",
+   "title": "Save for it",
+   "can": false,
+   "should": true,
+   "need": 5,
+   "pct": 125
+  }
+ },
+ {
+  "input": {
+   "a": {
+    "price": 400,
+    "income": 4000,
+    "household": "family",
+    "use": "weekly",
+    "replaces": "new",
+    "wanted": "weeks",
+    "ifnot": "sad"
+   },
+   "item": "therapy"
+  },
+  "expect": {
+   "key": "buy",
+   "title": "Yes. Go.",
+   "can": true,
+   "should": true,
+   "need": 6,
+   "pct": 10
+  }
+ },
+ {
+  "input": {
+   "a": {
+    "price": 2000,
+    "income": 4000,
+    "household": "family",
+    "use": "weekly",
+    "replaces": "new",
+    "wanted": "weeks",
+    "ifnot": "sad"
+   },
+   "item": "therapy"
+  },
+  "expect": {
+   "key": "save",
+   "title": "Find a way.",
+   "can": false,
+   "should": true,
+   "need": 6,
+   "pct": 50
+  }
+ },
+ {
+  "input": {
+   "a": {
+    "price": 150000,
+    "income": 4000,
+    "household": "family",
+    "use": "daily",
+    "replaces": "new",
+    "wanted": "weeks",
+    "ifnot": "sad"
+   },
+   "item": "surgery"
+  },
+  "expect": {
+   "key": "save",
+   "title": "Find a way.",
+   "can": false,
+   "should": true,
+   "need": 7,
+   "pct": 3750
+  }
+ },
+ {
+  "input": {
+   "a": {
+    "price": 120,
+    "income": 4000,
+    "household": "family",
+    "use": "weekly",
+    "replaces": "new",
+    "wanted": "weeks",
+    "ifnot": "sad"
+   },
+   "item": "knee brace",
+   "category": "Medical Supplies"
+  },
+  "expect": {
+   "key": "buy",
+   "title": "Yes. Go.",
+   "can": true,
+   "should": true,
+   "need": 6,
+   "pct": 3
+  }
+ },
+ {
+  "input": {
+   "a": {
+    "price": 40,
+    "income": 4000,
+    "household": "family",
+    "use": "weekly",
+    "replaces": "new",
+    "wanted": "weeks",
+    "ifnot": "sad"
+   },
+   "item": "fancy shampoo",
+   "category": "Health & Personal Care"
+  },
+  "expect": {
+   "key": "buy",
+   "title": "Buy it",
+   "can": true,
+   "should": true,
+   "need": 6,
+   "pct": 1
+  }
+ },
+ {
+  "input": {
+   "a": {
+    "price": 200,
+    "income": 4000,
+    "household": "family",
+    "use": "weekly",
+    "replaces": "new",
+    "wanted": "weeks",
+    "ifnot": "sad"
+   },
+   "item": "a dog bed",
+   "category": "Pet Supplies"
+  },
+  "expect": {
+   "key": "buy",
+   "title": "Buy it",
+   "can": true,
+   "should": true,
+   "need": 6,
+   "pct": 5
+  }
+ },
+ {
+  "input": {
+   "a": {
+    "price": 10000000,
+    "income": 4000,
+    "household": "family",
+    "use": "once",
+    "replaces": "new",
+    "wanted": "someone",
+    "ifnot": "sad"
+   },
+   "item": "a yacht"
+  },
+  "expect": {
+   "key": "dream",
+   "title": "Be serious.",
+   "can": false,
+   "should": false,
+   "need": 1,
+   "pct": 250000
+  }
+ },
+ {
+  "input": {
+   "a": {
+    "price": 500,
+    "income": 4000,
+    "household": "family",
+    "use": "weekends",
+    "replaces": "new",
+    "wanted": "someone",
+    "ifnot": "sad"
+   },
+   "item": "a PS5"
+  },
+  "expect": {
+   "key": "why",
+   "title": "You can. But why?",
+   "can": true,
+   "should": false,
+   "need": 2,
+   "pct": 13
+  }
+ }
+]
