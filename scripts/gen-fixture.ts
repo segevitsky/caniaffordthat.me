@@ -45,6 +45,8 @@ add({ ...base, price: 400, use: "weekly" }, "therapy");
 add({ ...base, price: 2000 }, "therapy");
 add({ ...base, price: 150000, use: "daily" }, "surgery");
 add({ ...base, price: 120 }, "knee brace", "Medical Supplies");
+add({ ...base, price: 300 }, "new glasses"); // sincere: whole-item glasses
+add({ ...base, price: 500 }, "AI Smart Glasses with POV Camera for 4K Photo & Video"); // gadget, NOT sincere
 add({ ...base, price: 40 }, "fancy shampoo", "Health & Personal Care");
 add({ ...base, price: 200 }, "a dog bed", "Pet Supplies");
 add({ ...base, price: 10000000, use: "once", wanted: "someone" }, "a yacht");

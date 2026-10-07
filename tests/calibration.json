@@ -2032,6 +2032,50 @@
  {
   "input": {
    "a": {
+    "price": 300,
+    "income": 4000,
+    "household": "family",
+    "use": "weekly",
+    "replaces": "new",
+    "wanted": "weeks",
+    "ifnot": "sad"
+   },
+   "item": "new glasses"
+  },
+  "expect": {
+   "key": "buy",
+   "title": "Yes. Go.",
+   "can": true,
+   "should": true,
+   "need": 6,
+   "pct": 8
+  }
+ },
+ {
+  "input": {
+   "a": {
+    "price": 500,
+    "income": 4000,
+    "household": "family",
+    "use": "weekly",
+    "replaces": "new",
+    "wanted": "weeks",
+    "ifnot": "sad"
+   },
+   "item": "AI Smart Glasses with POV Camera for 4K Photo & Video"
+  },
+  "expect": {
+   "key": "buy",
+   "title": "Buy it",
+   "can": true,
+   "should": true,
+   "need": 6,
+   "pct": 13
+  }
+ },
+ {
+  "input": {
+   "a": {
     "price": 40,
     "income": 4000,
     "household": "family",

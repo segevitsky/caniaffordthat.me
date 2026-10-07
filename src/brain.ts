@@ -538,8 +538,10 @@ const LIFE_MONEY: Record<LifeKind, (a: Answers) => string> = {
 // Sincere tier: the cynical-friend voice must not fire on therapy or a root canal.
 // Need is real by definition, so the only question left is CAN — verdict is buy or save, warm both ways.
 const SINCERE_RE =
-  /\b(therapy|therapists?|psychologists?|psychiatrists?|counsell?ing|counsell?ors?|rehab|meds|medications?|medicine|dentists?|doctors?|surgery|glasses|hearing aids?|physio(therapy)?|a wheelchair)\b/i;
-export const isSincere = (item: string) => SINCERE_RE.test(item);
+  /\b(therapy|therapists?|psychologists?|psychiatrists?|counsell?ing|counsell?ors?|rehab|meds|medications?|medicine|dentists?|doctors?|surgery|eyeglasses|prescription glasses|hearing aids?|physio(therapy)?|a wheelchair)\b/i;
+// "glasses" only as the whole item — "AI Smart Glasses with POV Camera" is a gadget, not healthcare
+const GLASSES_RE = /^((new|a|my|reading) )*glasses$/i;
+export const isSincere = (item: string) => SINCERE_RE.test(item) || GLASSES_RE.test(item.trim());
 
 const SINCERE_LINES: { yes: Pools; no: Pools } = {
   yes: {
