@@ -73,7 +73,10 @@ Goal: the share-sheet habit. Same brain and writer via the same endpoints.
     Under 3 → fix friction in 11 before anything else.
 
 ## Phase 3 — Money and depth (only after 15 shows a habit)
-16. **Affiliate on "buy it" only.** The user's own link, our tag. Transparency line next to it.
+16. **"Find it cheaper" on "buy it" only.** A button after the verdict, never automatic: searches the same
+    product across stores (AI with search or store APIs), returns 2–3 options each with a one-line why,
+    uses what we know (country for shipping/customs reality, second-hand if the user buys second-hand).
+    Affiliate tags where available; transparency line next to it. Other corners get nothing.
 17. **Product-knowledge signals (AI-supplied).** Cost of ownership, resale value, category abandonment
     rate. Fixed weights, shown as reasons.
 18. **"I disagree" — one round.** User writes a sentence, writer answers once, may propose an input change.
@@ -135,6 +138,15 @@ No `user_id` on `asks` in phase 1; phase 2 adds a nullable one.
   Validates: punch ≤ 90 chars, no digits not present in input numbers, corner-agreement check (a small
   classifier prompt or keyword rule); on failure regenerate once, then return a pool line with `fallback: true`.
   `seed` makes partner links deterministic (same seed → cached result).
+- `api/cheaper` (phase 3, "buy it" only, button-triggered) — `{ product, country, prefs, history? }` →
+  `{ options: [{ store, price, priceIsApprox, currency, shipping, url?, why }] }`.
+  v1: the AI wrapper with web search; prompt asks for 2–3 stores that ship to `country`, all-in price,
+  and a one-line why per option, using `prefs`/`history` (second-hand marketplaces if the user buys
+  second-hand, refurbished for price-sensitive personas). Post-process: HEAD every url, drop 404s, keep
+  store name without a link; mark prices approximate; cache by product+country for 6 h. Never scrape
+  stores directly. v2 when click-through justifies it: a shopping-search API (SerpApi/Oxylabs class) for
+  real-time prices, AI only to pick and explain. v3: affiliate programs (Amazon Associates, AliExpress,
+  eBay) to tag the links; Amazon requires sales volume to stay active, so only once there are users.
 - Later: `api/list/*` behind Supabase auth, `api/receipt` if we move PNG rendering server-side.
 
 ### Brain v2 implementation notes
@@ -181,8 +193,8 @@ No `user_id` on `asks` in phase 1; phase 2 adds a nullable one.
 ---
 
 ## Monetization rules
-- Links only on "buy it" (where to buy right) and "save for it" (cheaper version). Never on
-  "you can but why" or "absolutely not".
+- Purchase help (links, price search, alternatives) only on "buy it". Never on the other three corners,
+  including "save for it", at least until the product's identity is established.
 - The brain does not know affiliate exists. Corner is computed before any offer is looked up.
 - Every recommendation quotes the user's own answers as its reason. No sentence, no recommendation.
 - Disclosure next to the link: "We earn a bit if you buy through this. We'd say the same if we didn't."
