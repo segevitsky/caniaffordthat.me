@@ -1,6 +1,11 @@
 // POST /api/parse — { url } in, { name, price, currency, category, image, confidence, source } out.
-// Tier 1 only (OG + JSON-LD). AI fallback and the 24h cache come after the spike proves the tier-1 hit rate.
+// Tier 1: OG + JSON-LD from the page itself. Tier 2: when tier 1 can't produce name+price and an
+// ANTHROPIC_API_KEY is configured, a fast/cheap model with web search fills the gaps.
+// Still no cache (ROADMAP wants 24h by URL) — add once there's traffic worth caching.
 import { parseProductPage } from "./_lib/parse";
+import { aiParseProduct } from "./_lib/ai";
+
+export const config = { maxDuration: 30 }; // tier 1 (10s) + tier 2 (20s) can exceed the 10s default
 
 interface VercelRequest {
   method?: string;
@@ -40,5 +45,19 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   const url = safeUrl((req.body as Record<string, unknown> | undefined)?.url);
   if (!url) return res.status(400).json({ error: "bad url" });
   const result = await parseProductPage(url.href);
-  return res.status(200).json(result);
+  if (result.name && result.price) return res.status(200).json(result);
+
+  const guess = await aiParseProduct(url.href, result.name);
+  if (!guess || (!guess.name && !guess.price)) return res.status(200).json(result);
+
+  // tier 1 facts win where present; the model fills the gaps
+  return res.status(200).json({
+    ...result,
+    name: result.name ?? guess.name,
+    price: result.price ?? guess.price,
+    currency: result.currency ?? guess.currency,
+    category: result.category ?? guess.category,
+    confidence: Math.min(0.7, guess.confidence), // searched, not read off the page — cap below tier 1's 0.75+
+    source: "ai",
+  });
 }
