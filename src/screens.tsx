@@ -148,7 +148,7 @@ export function Verdict({ item, a, category, onPlan, onReset }: { item: string; 
         item,
         price: a.price,
         category: category ?? null,
-        answers: { income: a.income, household: a.household, use: a.use, replaces: a.replaces, wanted: a.wanted, ifnot: a.ifnot },
+        answers: { income: a.income, household: a.household, month: a.month ?? null, use: a.use, replaces: a.replaces, wanted: a.wanted, ifnot: a.ifnot },
         corner: r.key,
         can: r.can,
         should: r.should,

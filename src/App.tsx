@@ -1,14 +1,14 @@
 import { useState } from "react";
-import type { Answers, Household, IfNot, Replaces, Use, Wanted } from "./brain";
+import type { Answers, Household, IfNot, Month, Replaces, Use, Wanted } from "./brain";
 import { money } from "./brain";
 import { interceptFor } from "./brain";
 import { ChoiceQ, Intercept, Intro, Plan, PriceQ, SliderQ, Verdict } from "./screens";
 
 const DEFAULTS: Answers = { price: 0, income: 4000, household: "family", use: "weekly", replaces: "new", wanted: "weeks", ifnot: "sad" };
-const Q_COUNT = 7;
-const VERDICT = 8;
-const PLAN = 9;
-const INTERCEPT = 10;
+const Q_COUNT = 8;
+const VERDICT = 9;
+const PLAN = 10;
+const INTERCEPT = 11;
 
 export default function App() {
   const [step, setStep] = useState(0);
@@ -37,6 +37,9 @@ export default function App() {
     />,
     <PriceQ item={item} initial={linkPrice} onNext={set("price")} />,
     <SliderQ q="What do you make a month?" aside="After tax. Before regret." min={500} max={30000} step={100} initial={a.income} format={money} onNext={set("income")} />,
+    <ChoiceQ<Month> q="How's this month going?" aside="Financially. We won't ask about the rest."
+      options={[{ label: "Untouched, it's the 1st", value: "untouched" }, { label: "A few things I'd rather not mention", value: "fewthings" }, { label: "Stopped checking around the 12th", value: "stopped" }, { label: "The card knows more than I do", value: "cardknows" }]}
+      onNext={set("month")} />,
     <ChoiceQ<Household> q="Who lives with you?" aside="This decides who you'll have to explain it to."
       options={[{ label: "Just me", value: "solo" }, { label: "A partner", value: "partner" }, { label: "A partner and kids", value: "family" }, { label: "My parents, unfortunately", value: "parents" }]}
       onNext={set("household")} />,

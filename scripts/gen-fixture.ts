@@ -50,5 +50,11 @@ add({ ...base, price: 200 }, "a dog bed", "Pet Supplies");
 add({ ...base, price: 10000000, use: "once", wanted: "someone" }, "a yacht");
 add({ ...base, price: 500, use: "weekends", wanted: "someone" }, "a PS5");
 
+// month boundary cases: ratios straddling the shifted CAN thresholds (0.25 / 0.30 / 0.35 / 0.40)
+for (const month of ["untouched", "fewthings", "stopped", "cardknows"] as const)
+  for (const ratio of [0.22, 0.28, 0.33, 0.38, 0.42])
+    for (const needs of [NEEDSETS[0], NEEDSETS[1]])
+      add({ price: Math.round(4000 * ratio), income: 4000, household: "family", month, ...needs });
+
 writeFileSync("tests/calibration.json", JSON.stringify(cases, null, 1));
 console.log(`wrote tests/calibration.json with ${cases.length} cases`);

@@ -20,6 +20,7 @@ const REPLACES = ["new", "broken", "fine", "habit"];
 const WANTED = ["morning", "weeks", "years", "someone"];
 const IFNOT = ["nothing", "sad", "asking", "worse"];
 const CORNERS = ["buy", "why", "save", "no", "tiny", "dream"];
+const MONTHS = ["untouched", "fewthings", "stopped", "cardknows"];
 
 const oneOf = (v: unknown, list: string[]): v is string => typeof v === "string" && list.includes(v);
 const text = (v: unknown, max: number): v is string => typeof v === "string" && v.trim().length > 0 && v.length <= max;
@@ -82,6 +83,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     category,
     income_bucket: incomeBucket(a.income),
     household: a.household,
+    month_state: oneOf(a.month, MONTHS) ? a.month : null,
     use: a.use,
     replaces: a.replaces,
     wanted: a.wanted,

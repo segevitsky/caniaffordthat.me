@@ -10,11 +10,13 @@ export type Use = "daily" | "weekly" | "weekends" | "once";
 export type Replaces = "new" | "broken" | "fine" | "habit";
 export type Wanted = "morning" | "weeks" | "years" | "someone";
 export type IfNot = "nothing" | "sad" | "asking" | "worse";
+export type Month = "untouched" | "fewthings" | "stopped" | "cardknows";
 
 export interface Answers {
   price: number;
   income: number; // monthly, after tax
   household: Household;
+  month?: Month; // how's this month going — optional for old flows and the fixture
   use: Use;
   replaces: Replaces;
   wanted: Wanted;
@@ -67,6 +69,15 @@ export interface Signal {
   source: "user";
 }
 
+// month shifts the effective CAN threshold: a fresh month buys ~5 points of slack,
+// a "card knows more than I do" month takes ~10 away (0.35 -> 0.25)
+const MONTH = {
+  untouched: { score: 0.05, reason: "the month hasn't touched the account yet" },
+  fewthings: { score: 0, reason: "the month already had a few purchases" },
+  stopped: { score: -0.05, reason: "you stopped checking the balance around the 12th" },
+  cardknows: { score: -0.1, reason: "the card knows more than you do this month" },
+} as const;
+
 const REASONS = {
   use: { daily: "you'd use it every day", weekly: "you'd use it weekly", weekends: "'weekends' means about 20 real uses a year", once: "you'd use it once" },
   replaces: { habit: "it replaces a habit that already costs money", broken: "it replaces something broken", new: "it replaces nothing you own", fine: "it replaces something that works fine" },
@@ -78,6 +89,7 @@ interface SignalCtx { a: Answers; ratio: number; pct: number }
 
 const SIGNAL_FNS: ((c: SignalCtx) => Signal | null)[] = [
   ({ ratio, pct }) => ({ name: "share_of_income", axis: "can", score: CAN_THRESHOLD - ratio, weight: WEIGHTS.share_of_income, reason: `it costs ${pct}% of a month's income`, source: "user" }),
+  ({ a }) => (a.month ? { name: "month_state", axis: "can", score: MONTH[a.month].score, weight: WEIGHTS.month_state, reason: MONTH[a.month].reason, source: "user" } : null),
   ({ a }) => ({ name: "use_frequency", axis: "should", score: NEED.use[a.use] - 1.5, weight: WEIGHTS.use_frequency, reason: REASONS.use[a.use], source: "user" }),
   ({ a }) => ({ name: "replaces", axis: "should", score: NEED.replaces[a.replaces] - 1.5, weight: WEIGHTS.replaces, reason: REASONS.replaces[a.replaces], source: "user" }),
   ({ a }) => ({ name: "wanted_since", axis: "should", score: NEED.wanted[a.wanted] - 1.5, weight: WEIGHTS.wanted_since, reason: REASONS.wanted[a.wanted], source: "user" }),
