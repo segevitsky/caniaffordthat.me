@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Answers, categoryKind, decide, interceptFor, isSpicy, money, pickLine, plan } from "./brain";
+import { renderReceipt } from "./receipt";
 import { Aside, Btn, Q } from "./ui";
 
 const PLACEHOLDERS = [
@@ -219,24 +220,61 @@ export function Verdict({ item, a, category, onPlan, onReset }: { item: string; 
     </span>
   );
   const clean = r.key === "buy" || r.key === "tiny";
+  const shownPunch = ai?.punch ?? r.punch;
+
+  // the receipt (ROADMAP §1.8): re-rendered whenever the shown punch changes
+  const receiptBlob = useRef<Blob | null>(null);
+  const [receiptUrl, setReceiptUrl] = useState<string | null>(null);
+  useEffect(() => {
+    let stale = false;
+    renderReceipt(a, r, item, shownPunch)
+      .then((blob) => {
+        if (stale) return;
+        receiptBlob.current = blob;
+        setReceiptUrl((old) => {
+          if (old) URL.revokeObjectURL(old);
+          return URL.createObjectURL(blob);
+        });
+      })
+      .catch(() => {});
+    return () => { stale = true; };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [shownPunch]);
+
+  const shareReceipt = async () => {
+    const blob = receiptBlob.current ?? (await renderReceipt(a, r, item, shownPunch).catch(() => null));
+    if (!blob) return;
+    const file = new File([blob], "caniaffordthat-receipt.png", { type: "image/png" });
+    if (typeof navigator.canShare === "function" && navigator.canShare({ files: [file] })) {
+      try { await navigator.share({ files: [file] }); return; } catch { /* user closed the sheet */ }
+    }
+    const url = URL.createObjectURL(blob);
+    const el = document.createElement("a");
+    el.href = url;
+    el.download = "caniaffordthat-receipt.png";
+    el.click();
+    setTimeout(() => URL.revokeObjectURL(url), 3000);
+  };
   return (
     <div className="fadein">
       <p className="font-body text-lg mb-4 text-ink/55">{item}, {money(a.price)}</p>
       <div className="flex gap-2 mb-6"><Pill ok={r.can} label="Can afford" /><Pill ok={r.should} label="Should buy" /></div>
       <div className={`font-display text-2xl mb-4 inline-block px-3 py-1 text-ink ${clean ? "" : "bg-yellow"}`}>{r.title}</div>
-      <h2 key={ai?.punch ?? r.punch} className="font-display fadein text-3xl sm:text-4xl md:text-6xl leading-[1.02] mb-6 text-ink max-w-[16ch] tracking-tight">{ai?.punch ?? r.punch}</h2>
+      <h2 key={shownPunch} className="font-display fadein text-3xl sm:text-4xl md:text-6xl leading-[1.02] mb-6 text-ink max-w-[16ch] tracking-tight">{shownPunch}</h2>
       <button onClick={reroll} disabled={rolling} className={`font-body text-base mb-8 px-4 py-3 min-h-[44px] rounded-full border-2 border-ink text-ink focus:outline-none focus-visible:ring-4 ${rolling ? "opacity-50" : ""}`}>
         {rolling ? "Thinking…" : REROLL[Math.min(rolls, REROLL.length - 1)]}
       </button>
       <p className="font-body text-lg md:text-xl mb-10 max-w-xl text-ink border-l-[6px] border-yellow pl-4">{r.fact}</p>
       {ai?.personal && <p key={ai.personal} className="font-body fadein text-lg md:text-xl -mt-6 mb-10 max-w-xl text-ink border-l-[6px] border-blue pl-4">{ai.personal}</p>}
 
-      <div className="rounded-2xl p-6 mb-10 max-w-md bg-ink text-paper">
-        <p className="font-body text-sm mb-2 opacity-60">caniaffordthat.me</p>
-        <p className="font-body text-lg mb-1">{item}</p>
-        <p className="font-body text-sm mb-3 opacity-80">Can afford: {r.can ? "yes" : "no"}. Should buy: {r.should ? "yes" : "no"}.</p>
-        <p className="font-display text-3xl">{r.title}</p>
-      </div>
+      {receiptUrl && (
+        <div className="mb-10 max-w-sm">
+          <img src={receiptUrl} alt="Your verdict, as a receipt" className="w-full drop-shadow-md" />
+          <div className="mt-4">
+            <Btn dark onClick={shareReceipt}>Send the receipt</Btn>
+          </div>
+        </div>
+      )}
 
       <div className="flex flex-col sm:flex-row sm:flex-wrap gap-3 sm:items-center">
         {(r.key === "save" || r.key === "no" || r.key === "dream") && <Btn onClick={onPlan}>Show me how to afford it anyway</Btn>}
